@@ -1,0 +1,1 @@
+require "wallaby/activerecord/version"

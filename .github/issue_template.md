@@ -29,6 +29,8 @@ If you would like to chat about the question in real-time, you can reach out via
 ### System configuration
 **Wallaby core version**:
 
+**Wallaby ActiveRecord version**:
+
 **Rails version**:
 
 **Ruby version**:

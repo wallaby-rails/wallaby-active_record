@@ -2,18 +2,18 @@
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'wallaby/core/version'
+require 'wallaby/active_record/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'wallaby-core'
-  spec.version       = Wallaby::Core::VERSION
+  spec.name          = 'wallaby-active_record'
+  spec.version       = Wallaby::ActiveRecord::VERSION
   spec.authors       = ['Tian Chen']
   spec.email         = ['me@tian.im']
   spec.license       = 'MIT'
 
-  spec.summary       = %q{The core of Wallaby}
+  spec.summary       = %q{Wallaby's ActiveRecord ORM adapter}
   spec.description   = spec.summary
-  spec.homepage      = 'https://github.com/wallaby-rails/wallaby-core'
+  spec.homepage      = 'https://github.com/wallaby-rails/wallaby-active_record'
 
   spec.metadata = {
     'homepage_uri' => spec.homepage,
@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
   spec.test_files = Dir['spec/**/*']
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'rails', '>= 4.2.0'
-  spec.add_dependency 'parslet'
-  spec.add_dependency 'responders'
+  spec.add_dependency 'wallaby-core'
+  spec.add_dependency 'kaminari'
 end

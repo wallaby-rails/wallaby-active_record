@@ -1,5 +1,5 @@
 module Wallaby
-  module Core
+  module ActiveRecord
     VERSION = "0.1.0"
   end
 end
