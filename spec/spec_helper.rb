@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "wallaby/core"
+require "wallaby/active_record"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
