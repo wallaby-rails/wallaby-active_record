@@ -1,5 +1,5 @@
 module Wallaby
-  module ActiveRecord
+  module ActiveRecordGem
     VERSION = "0.1.0"
   end
 end

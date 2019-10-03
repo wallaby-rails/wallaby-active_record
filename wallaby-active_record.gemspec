@@ -6,7 +6,7 @@ require 'wallaby/active_record/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'wallaby-active_record'
-  spec.version       = Wallaby::ActiveRecord::VERSION
+  spec.version       = Wallaby::ActiveRecordGem::VERSION
   spec.authors       = ['Tian Chen']
   spec.email         = ['me@tian.im']
   spec.license       = 'MIT'
@@ -30,5 +30,4 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'wallaby-core'
-  spec.add_dependency 'kaminari'
 end
