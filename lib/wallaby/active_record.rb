@@ -1,8 +1,6 @@
 require 'wallaby/active_record/version'
 
 # All files required for ActiveRecord ORM
-require 'kaminari'
-
 require 'adapters/wallaby/active_record'
 require 'adapters/wallaby/active_record/model_finder'
 
