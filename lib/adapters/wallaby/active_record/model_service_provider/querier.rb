@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wallaby
   class ActiveRecord
     class ModelServiceProvider
@@ -100,6 +102,7 @@ module Wallaby
         # @return [ActiveRecord::Relation]
         def text_search(keywords, query = nil)
           return query unless keywords_check? keywords
+
           text_fields.each do |field_name|
             sub_query = nil
             keywords.each do |keyword|
@@ -117,6 +120,7 @@ module Wallaby
         # @return [ActiveRecord::Relation]
         def field_search(field_queries, query)
           return query unless field_check? field_queries
+
           field_queries.each do |exp|
             sub_query = table[exp[:left]].try(exp[:op], exp[:right])
             query = query.try(:and, sub_query) || sub_query
@@ -142,6 +146,7 @@ module Wallaby
         def keywords_check?(keywords)
           return false if keywords.blank?
           return true if text_fields.present?
+
           message = I18n.t 'errors.unprocessable_entity.keyword_search'
           raise UnprocessableEntity, message
         end
@@ -152,9 +157,11 @@ module Wallaby
         #   otherwise, raise exception
         def field_check?(field_queries)
           return false if field_queries.blank?
+
           fields = field_queries.map { |exp| exp[:left] }
           invalid_fields = fields - @model_decorator.fields.keys
           return true if invalid_fields.blank?
+
           message = I18n.t 'errors.unprocessable_entity.field_colon_search',
                            invalid_fields: invalid_fields.to_sentence
           raise UnprocessableEntity, message

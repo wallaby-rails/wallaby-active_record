@@ -1,9 +1,7 @@
-RSpec.describe Wallaby::ActiveRecord do
-  it "has a version number" do
-    expect(Wallaby::ActiveRecord::VERSION).not_to be nil
-  end
+require 'rails_helper'
 
-  it "does something useful" do
-    expect(false).to eq(true)
+RSpec.describe Wallaby::ActiveRecord do
+  it 'has a version number' do
+    expect(Wallaby::ActiveRecordGem::VERSION).not_to be nil
   end
 end

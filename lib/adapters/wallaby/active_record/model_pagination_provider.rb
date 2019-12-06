@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wallaby
   class ActiveRecord
     # Model pagination provider
@@ -8,6 +10,7 @@ module Wallaby
         # `total_count` is a method that kaminari uses
         (@collection && @collection.respond_to?(:total_count)).tap do |paginatable|
           next if paginatable
+
           Rails.logger.warn I18n.t('errors.activerecord.paginatable', collection: @collection.inspect)
         end
       end

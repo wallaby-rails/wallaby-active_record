@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wallaby
   class ActiveRecord
     # Model finder
@@ -13,6 +15,7 @@ module Wallaby
       # @return [ApplicationRecord, ActiveRecord::Base] base ActiveRecord class
       def self.base
         return ::ApplicationRecord if defined? ::ApplicationRecord
+
         ::ActiveRecord::Base
       end
 

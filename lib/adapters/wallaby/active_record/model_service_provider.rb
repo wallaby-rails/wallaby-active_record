@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wallaby
   class ActiveRecord
     # Model service provider
@@ -118,6 +120,7 @@ module Wallaby
       # @param resource [Object]
       def ensure_attributes_for(authorizer, action, resource)
         return if authorizer.blank?
+
         restricted_conditions = authorizer.attributes_for action, resource
         resource.assign_attributes restricted_conditions
       end
