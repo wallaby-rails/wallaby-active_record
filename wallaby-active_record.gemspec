@@ -30,4 +30,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'wallaby-core'
+
+  spec.add_development_dependency 'rspec-rails'
+  spec.add_development_dependency 'wallaby-cop'
 end

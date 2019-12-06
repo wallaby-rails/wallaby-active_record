@@ -1,3 +1,4 @@
+require 'kaminari'
 require 'wallaby/active_record/version'
 
 # All files required for ActiveRecord ORM
