@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Wallaby
   class ActiveRecord
     class ModelDecorator
@@ -15,7 +17,7 @@ module Wallaby
           def update(metadata, column)
             return unless @model_class.inheritance_column == column.name
 
-            metadata[:type] = 'sti'.freeze
+            metadata[:type] = 'sti'
             metadata[:sti_class_list] = sti_list(find_parent_of(@model_class))
           end
 
