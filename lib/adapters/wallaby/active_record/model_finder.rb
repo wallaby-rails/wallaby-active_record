@@ -13,6 +13,7 @@ module Wallaby
       # @return [ApplicationRecord, ActiveRecord::Base] base ActiveRecord class
       def self.base
         return ::ApplicationRecord if defined? ::ApplicationRecord
+
         ::ActiveRecord::Base
       end
 

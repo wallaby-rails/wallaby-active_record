@@ -15,6 +15,7 @@ module Wallaby
               @model_decorator.metadata_of(field_name).presence || @model_decorator.form_metadata_of(field_name)
             type = metadata[:type].try(:[], /range|point|binary/)
             next unless type
+
             public_send "normalize_#{type}_values", params, field_name, values
           end
           params

@@ -48,6 +48,7 @@ module Wallaby
             operator = SIMPLE_OPERATORS[oped]
             # skip if the operator is unknown
             next unless operator
+
             lefted = left.try :to_str
             convert =
               case oped
@@ -63,6 +64,7 @@ module Wallaby
             oped = op.try :to_str
             operator = SEQUENCE_OPERATORS[oped]
             next unless operator
+
             lefted = left.try :to_str
             convert = Range.new right.try(:first), right.try(:last) if %w(:() :!()).include?(oped)
             { left: lefted, op: operator, right: convert || right }

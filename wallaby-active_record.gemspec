@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'wallaby/active_record/version'
 
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['me@tian.im']
   spec.license       = 'MIT'
 
-  spec.summary       = %q{Wallaby's ActiveRecord ORM adapter}
+  spec.summary       = "Wallaby's ActiveRecord ORM adapter"
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/wallaby-rails/wallaby-active_record'
 

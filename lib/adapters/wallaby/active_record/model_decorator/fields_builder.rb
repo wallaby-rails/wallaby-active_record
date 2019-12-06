@@ -40,6 +40,7 @@ module Wallaby
         # @return [String] field type
         def to_type(column)
           return 'active_storage' if @model_class.respond_to?("with_attached_#{column.name}")
+
           column.type.to_s
         end
 

@@ -14,6 +14,7 @@ module Wallaby
           resource.attributes.each do |field_name, values|
             metadata = @model_decorator.fields[field_name]
             next if valid_range_type? values, metadata
+
             resource.errors.add field_name, 'required for range data'
           end
           resource.errors.blank?
