@@ -1,0 +1,7 @@
+  [WALLABY] Preload files after initialize.
+  [WALLABY] Preload warning: Error loading the 'sqlite3' Active Record adapter. Missing a gem it depends on? sqlite3 is not part of the bundle. Add it to your Gemfile. from /wallaby-active_record/spec/dummy/app/models/application_record.rb
+["/home/vagrant/.rvm/gems/ruby-2.6.5/gems/bundler-2.0.2/lib/bundler/rubygems_integration.rb:406:in `block (2 levels) in replace_gem'", "/home/vagrant/.rvm/gems/ruby-2.6.5/gems/activerecord-6.0.1/lib/active_record/connection_adapters/sqlite3_adapter.rb:13:in `<top (required)>'", "/home/vagrant/.rvm/gems/ruby-2.6.5/gems/zeitwerk-2.2.2/lib/zeitwerk/kernel.rb:23:in `require'", "/home/vagrant/.rvm/gems/ruby-2.6.5/gems/zeitwerk-2.2.2/lib/zeitwerk/kernel.rb:23:in `require'", "/home/vagrant/.rvm/gems/ruby-2.6.5/gems/activerecord-6.0.1/lib/active_record/connection_adapters/connection_specification.rb:170:in `spec'"]
+  [WALLABY] Preload files after initialize.
+  [1m[35m (2.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m

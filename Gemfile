@@ -6,3 +6,4 @@ gemspec
 gem 'kaminari'
 gem 'wallaby-core', path: '/wallaby-core'
 gem 'will_paginate' # TODO: support will_paginate later
+gem 'sqlite3'
