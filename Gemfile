@@ -13,5 +13,3 @@ gem 'sqlite3'
 
 gem 'wallaby-cop', path: '/wallaby-cop'
 gem 'wallaby-core', path: '/wallaby-core'
-
-gem 'kaminari'
