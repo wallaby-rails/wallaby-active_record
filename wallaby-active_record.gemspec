@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('lib', __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+$LOAD_PATH.push File.expand_path('lib', __dir__)
+
 require 'wallaby/active_record/version'
 
 Gem::Specification.new do |spec|
@@ -26,11 +26,12 @@ Gem::Specification.new do |spec|
     'LICENSE',
     'README.md'
   ]
-  spec.test_files = Dir['spec/**/*']
-  spec.require_paths = ['lib']
 
+  spec.add_dependency 'kaminari'
   spec.add_dependency 'wallaby-core'
 
+  spec.add_development_dependency 'cancancan'
+  spec.add_development_dependency 'pundit'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'wallaby-cop'
 end
