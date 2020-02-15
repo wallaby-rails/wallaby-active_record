@@ -6,7 +6,7 @@ module Wallaby
       class Querier
         # Build up query using the results
         class Transformer < Parslet::Transform
-          SIMPLE_OPERATORS = {
+          SIMPLE_OPERATORS = { # :nodoc:
             ':' => :eq,
             ':=' => :eq,
             ':!' => :not_eq,
@@ -24,7 +24,7 @@ module Wallaby
             ':<=' => :lteq
           }.freeze
 
-          SEQUENCE_OPERATORS = {
+          SEQUENCE_OPERATORS = { # :nodoc:
             ':' => :in,
             ':=' => :in,
             ':!' => :not_in,
@@ -34,15 +34,18 @@ module Wallaby
             ':!()' => :not_between
           }.freeze
 
-          # For single keyword
-          rule keyword: simple(:value) do
-            value.try :to_str
-          end
+          # For single null
+          rule null: simple(:value)
+          rule null: sequence(:value)
 
-          # For multiple keywords
-          rule keyword: sequence(:value) do
-            value.presence.try :map, :to_str
-          end
+          # For single boolean
+          rule(boolean: simple(:value)) { /true/i.match? value }
+
+          # For single string
+          rule(string: simple(:value)) { value.try :to_str }
+
+          # For multiple strings
+          rule(string: sequence(:value)) { EMPTY_STRING }
 
           # For operators
           rule left: simple(:left), op: simple(:op), right: simple(:right) do

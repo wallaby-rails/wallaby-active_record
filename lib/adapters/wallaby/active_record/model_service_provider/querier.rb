@@ -106,7 +106,7 @@ module Wallaby
           text_fields.each do |field_name|
             sub_query = nil
             keywords.each do |keyword|
-              exp = table[field_name].matches("%#{keyword}%")
+              exp = table[field_name].matches(Escaper.execute(keyword))
               sub_query = sub_query.try(:and, exp) || exp
             end
             query = query.try(:or, sub_query) || sub_query
