@@ -149,7 +149,7 @@ describe Wallaby::ActiveRecord::ModelDecorator do
 
     describe '#index_field_names' do
       it 'excludes fields that have long value' do
-        if Rails::VERSION::MAJOR == 5
+        if Rails::VERSION::MAJOR >= 5
           expect(subject.index_field_names).to match_array %w(id bigint bigserial bit bit_varying boolean box cidr circle color date daterange datetime decimal email float inet int4range int8range integer line lseg ltree macaddr money numrange password path point polygon serial string time tsrange tstzrange uuid)
         elsif Rails::VERSION::MAJOR == 4
           expect(subject.index_field_names).to match_array %w(id bigint bit bit_varying boolean cidr color date daterange datetime decimal email float inet int4range int8range integer ltree macaddr money numrange password string time tsrange tstzrange uuid)
@@ -159,7 +159,7 @@ describe Wallaby::ActiveRecord::ModelDecorator do
 
     describe '#show_field_names' do
       it 'includes all field names' do
-        if Rails::VERSION::MAJOR == 5
+        if Rails::VERSION::MAJOR >= 5
           expect(subject.show_field_names).to match_array %w(id bigint bigserial binary bit bit_varying boolean box cidr circle citext color date daterange datetime decimal email float hstore inet int4range int8range integer json jsonb line lseg ltree macaddr money numrange password path point polygon serial string text time tsrange tstzrange tsvector uuid xml)
         elsif Rails::VERSION::MAJOR == 4
           expect(subject.show_field_names).to match_array %w(id bigint binary bit bit_varying boolean cidr citext color date daterange datetime decimal email float hstore inet int4range int8range integer json jsonb ltree macaddr money numrange password string text time tsrange tstzrange tsvector uuid xml)
@@ -169,7 +169,7 @@ describe Wallaby::ActiveRecord::ModelDecorator do
 
     describe '#form_field_names' do
       it 'excludes id, created_at, updated_at, has_scope and is_through fields' do
-        if Rails::VERSION::MAJOR == 5
+        if Rails::VERSION::MAJOR >= 5
           expect(subject.form_field_names).to match_array %w(bigint bigserial binary bit bit_varying boolean box cidr circle citext color date daterange datetime decimal email float hstore inet int4range int8range integer json jsonb line lseg ltree macaddr money numrange password path point polygon serial string text time tsrange tstzrange tsvector uuid xml)
         elsif Rails::VERSION::MAJOR == 4
           expect(subject.form_field_names).to match_array %w(bigint binary bit bit_varying boolean cidr citext color date daterange datetime decimal email float hstore inet int4range int8range integer json jsonb ltree macaddr money numrange password string text time tsrange tstzrange tsvector uuid xml)

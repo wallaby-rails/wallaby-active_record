@@ -6,8 +6,6 @@ module Wallaby
       class Querier
         # Build up query using the results
         class Transformer < Parslet::Transform
-          include ::ActiveRecord::Sanitization
-
           SIMPLE_OPERATORS = { # :nodoc:
             ':' => :eq,
             ':=' => :eq,

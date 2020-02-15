@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'parslet/rig/rspec'
 
 describe Wallaby::ActiveRecord::ModelServiceProvider::Querier::Transformer do
   describe 'simple keywords' do
