@@ -6,7 +6,6 @@ module Wallaby
       # Query builder
       class Querier
         TEXT_FIELDS = %w(string text citext longtext tinytext mediumtext).freeze
-        LIKE_SIGN = /[%_]/.freeze
 
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)

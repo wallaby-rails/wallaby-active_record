@@ -7,6 +7,8 @@ module Wallaby
         # Build up query using the results
         class Escaper
           include ::ActiveRecord::Sanitization
+          LIKE_SIGN = /[%_]/.freeze # :nodoc:
+          PCT = '%' # :nodoc:
 
           class << self
             def execute(keyword)
