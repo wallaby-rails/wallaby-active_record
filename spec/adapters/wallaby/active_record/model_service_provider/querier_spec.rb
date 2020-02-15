@@ -192,7 +192,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
               if version? '>= 5.2.1'
                 expect(subject.search(parameters(q: keyword)).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."boolean" IN (TRUE, FALSE)'
               else
-                expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE \"all_postgres_types\".\"boolean\" IN ('true', 'false')"
+                expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE \"all_postgres_types\".\"boolean\" IN ('t', 'f')"
               end
             end
           end
@@ -347,7 +347,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
                 {
                   '>=5.2' => 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."boolean" NOT IN (TRUE, FALSE)'
                 },
-                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('true', 'false'))"
+                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('t', 'f'))"
               )
 
               keyword = 'boolean:!=true,false'
@@ -355,7 +355,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
                 {
                   '>=5.2' => 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."boolean" NOT IN (TRUE, FALSE)'
                 },
-                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('true', 'false'))"
+                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('t', 'f'))"
               )
 
               keyword = 'boolean:<>true,false'
@@ -363,7 +363,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
                 {
                   '>=5.2' => 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."boolean" NOT IN (TRUE, FALSE)'
                 },
-                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('true', 'false'))"
+                "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" NOT IN ('t', 'f'))"
               )
             end
           end
