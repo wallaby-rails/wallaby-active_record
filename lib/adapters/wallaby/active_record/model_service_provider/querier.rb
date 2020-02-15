@@ -8,7 +8,7 @@ module Wallaby
         include ::ActiveRecord::Sanitization
 
         TEXT_FIELDS = %w(string text citext longtext tinytext mediumtext).freeze
-        LIKE_SIGN = /[%_]/
+        LIKE_SIGN = /[%_]/.freeze
 
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)
@@ -171,7 +171,8 @@ module Wallaby
         end
 
         def escape(keyword)
-          first, last = keyword.first, keyword.last
+          first = keyword.first
+          last = keyword.last
           start_with, start_index = LIKE_SIGN.match?(first) ? [true, 1] : [false, 0]
           end_with, end_index = LIKE_SIGN.match?(last) ? [true, -2] : [false, -1]
           escaped = self.class.sanitize_sql_like keyword[start_index..end_index]

@@ -1,31 +1,37 @@
-# Wallaby::ActiveRecord
+# [Wallaby::ActiveRecord](https://github.com/wallaby-rails/wallaby-active_record)
 
-This gem contains the ActiveRecord ORM adapter for Wallaby.
+[![Gem Version](https://badge.fury.io/rb/wallaby-active_record.svg)](https://badge.fury.io/rb/wallaby-active_record)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Travis CI](https://travis-ci.com/wallaby-rails/wallaby-active_record.svg?branch=master)](https://travis-ci.com/wallaby-rails/wallaby-active_record)
+[![Maintainability](https://api.codeclimate.com/v1/badges/9ba0a610043a2e1a9e74/maintainability)](https://codeclimate.com/github/wallaby-rails/wallaby-active_record/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/9ba0a610043a2e1a9e74/test_coverage)](https://codeclimate.com/github/wallaby-rails/wallaby-active_record/test_coverage)
+[![Inch CI](https://inch-ci.org/github/wallaby-rails/wallaby-active_record.svg?branch=master)](https://inch-ci.org/github/wallaby-rails/wallaby-active_record)
 
-## Installation
+Wallaby::ActiveRecord is the ActiveRecord adapter for [Wallaby::Core](https://github.com/wallaby-rails/wallaby-core).
 
-Add this line to your application's Gemfile:
+## Install
+
+Add `Wallaby::ActiveRecord` to `Gemfile`.
 
 ```ruby
 gem 'wallaby-active_record'
 ```
 
-And then execute:
+And re-bundle.
 
 ```shell
-$ bundle
+bundle install
 ```
 
-Or install it yourself as:
+## Documentation
 
-```shell
-$ gem install wallaby-active_record
-```
+- [API Reference](https://www.rubydoc.info/gems/wallaby-active_record)
+- [Change Logs](https://github.com/wallaby-rails/wallaby-active_record/blob/master/CHANGELOG.md)
 
-## Contributing
+## Want to contribute?
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/wallaby-rails/wallaby-active_record.
+Raise an [issue](https://github.com/wallaby-rails/wallaby-active_record/issues/new), discuss and resolve!
 
 ## License
 
-This project is [MIT Licensed](LICENSE)
+This project uses [MIT License](https://github.com/wallaby-rails/wallaby-active_record/blob/master/LICENSE).

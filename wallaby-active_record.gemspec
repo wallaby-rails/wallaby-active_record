@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
     'README.md'
   ]
 
+  spec.add_dependency 'activerecord', '>= 4.2.0'
   spec.add_dependency 'kaminari'
   spec.add_dependency 'wallaby-core'
 

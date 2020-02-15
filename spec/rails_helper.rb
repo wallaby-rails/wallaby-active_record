@@ -1,3 +1,15 @@
+if ENV['DEEP']
+  require 'deep-cover'
+else
+  # NOTE: simplecov has to stay at the top of everything else to work properly.
+  require 'simplecov'
+  SimpleCov.minimum_coverage 100
+  SimpleCov.start 'rails' do
+    add_filter 'wallaby/active_record/version'
+    add_filter 'lib/generator'
+  end
+end
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -22,12 +34,12 @@ require 'rspec/rails'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Pathname.new(__FILE__).dirname.join('support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
-  # ActiveRecord::Migration.maintain_test_schema!
+  ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
