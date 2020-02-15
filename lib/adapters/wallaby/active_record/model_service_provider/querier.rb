@@ -5,7 +5,10 @@ module Wallaby
     class ModelServiceProvider
       # Query builder
       class Querier
+        include ::ActiveRecord::Sanitization
+
         TEXT_FIELDS = %w(string text citext longtext tinytext mediumtext).freeze
+        LIKE_SIGN = /[%_]/
 
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)
@@ -106,7 +109,7 @@ module Wallaby
           text_fields.each do |field_name|
             sub_query = nil
             keywords.each do |keyword|
-              exp = table[field_name].matches("%#{keyword}%")
+              exp = table[field_name].matches(escape(keyword))
               sub_query = sub_query.try(:and, exp) || exp
             end
             query = query.try(:or, sub_query) || sub_query
@@ -165,6 +168,17 @@ module Wallaby
           message = I18n.t 'errors.unprocessable_entity.field_colon_search',
                            invalid_fields: invalid_fields.to_sentence
           raise UnprocessableEntity, message
+        end
+
+        def escape(keyword)
+          first, last = keyword.first, keyword.last
+          start_with, start_index = LIKE_SIGN.match?(first) ? [true, 1] : [false, 0]
+          end_with, end_index = LIKE_SIGN.match?(last) ? [true, -2] : [false, -1]
+          escaped = self.class.sanitize_sql_like keyword[start_index..end_index]
+          starting = start_with ? first : (end_with ? nil : PCT)
+          ending = end_with ? last : (start_with ? nil : PCT)
+
+          "#{starting}#{escaped}#{ending}"
         end
       end
     end
