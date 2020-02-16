@@ -2,8 +2,7 @@
 
 module Wallaby
   class ActiveRecord
-    # Model service provider
-    # @see Wallaby::ModelServiceProvider
+    # Model service provider for {Wallaby::ActiveRecord}
     class ModelServiceProvider < ::Wallaby::ModelServiceProvider
       # @param params [ActionController::Parameters]
       # @param action [String, Symbol]
@@ -33,7 +32,8 @@ module Wallaby
       def paginate(query, params)
         per = params[:per] || Wallaby.configuration.pagination.page_size
         query = query.page params[:page] if query.respond_to? :page
-        query = query.per per if query.respond_to? :per
+        query = query.per per if query.respond_to? :per # kaminari
+        query = query.per_page per if query.respond_to? :per_page # will_paginate
         query
       end
 

@@ -20,10 +20,14 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
       Product.create name: 'product1'
       Product.create name: 'product2'
       Product.create name: 'product3'
+
+      query = Product.page(1)
       subject = described_class.new Product.page(1), parameters
       expect(subject.total).to eq 3
 
-      subject = described_class.new Product.page(1).per(1), parameters
+      per_method = query.respond_to?(:per) ? :per : :per_page
+      query = query.public_send(per_method, 1)
+      subject = described_class.new query, parameters
       expect(subject.total).to eq 3
     end
   end

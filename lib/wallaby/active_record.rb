@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'kaminari'
 require 'wallaby/core'
 
 require 'wallaby/active_record/version'
