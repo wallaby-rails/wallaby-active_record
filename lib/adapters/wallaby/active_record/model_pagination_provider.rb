@@ -12,9 +12,11 @@ module Wallaby
           # kaminari
           @collection.respond_to?(:total_count) || \
           @collection.respond_to?(:total_entries) # will_paginate
-        Rails.logger.warn I18n.t(
-          'errors.activerecord.paginatable', collection: @collection.inspect
-        ) unless paginatable
+        unless paginatable
+          Rails.logger.warn I18n.t(
+            'errors.activerecord.paginatable', collection: @collection.inspect
+          )
+        end
 
         paginatable
       end
@@ -23,7 +25,7 @@ module Wallaby
       def total
         # kaminari
         @collection.try(:total_count) || \
-        @collection.try(:total_entries) # will_paginate
+          @collection.try(:total_entries) # will_paginate
       end
 
       # @return [Integer] page size from parameters or
