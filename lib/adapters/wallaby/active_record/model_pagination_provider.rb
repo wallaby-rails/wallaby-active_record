@@ -2,30 +2,40 @@
 
 module Wallaby
   class ActiveRecord
-    # Model pagination provider
+    # Model pagination provider for {Wallaby::ActiveRecord}
     class ModelPaginationProvider < ::Wallaby::ModelPaginationProvider
-      # Check if collection has pagination feature
-      # @return [Boolean]
+      # Check if collection can be paginated
+      # @return [true] if paginatable
+      # @return [false] if not paginatable
       def paginatable?
-        # `total_count` is a method that kaminari uses
-        (@collection && @collection.respond_to?(:total_count)).tap do |paginatable|
-          next if paginatable
-
-          Rails.logger.warn I18n.t('errors.activerecord.paginatable', collection: @collection.inspect)
+        paginatable =
+          # kaminari
+          @collection.respond_to?(:total_count) || \
+          @collection.respond_to?(:total_entries) # will_paginate
+        unless paginatable
+          Rails.logger.warn I18n.t(
+            'errors.activerecord.paginatable', collection: @collection.inspect
+          )
         end
+
+        paginatable
       end
 
-      # @return [Integer] total count for the query
+      # @return [Integer] total count for the collection
       def total
-        @collection.total_count
+        # kaminari
+        @collection.try(:total_count) || \
+          @collection.try(:total_entries) # will_paginate
       end
 
-      # @return [Integer] page size from parameters or configuration
+      # @return [Integer] page size from parameters or
+      #   {https://rubydoc.info/gems/wallaby-core/Wallaby/Configuration/Pagination#page_size-instance_method page_size}
+      #   Wallaby configuration
       def page_size
         @params[:per].try(:to_i) || Wallaby.configuration.pagination.page_size
       end
 
-      # @return [Integer] page number from parameters
+      # @return [Integer] page number from parameters starting from 1
       def page_number
         [@params[:page].to_i, 1].max
       end

@@ -115,7 +115,7 @@ module Wallaby
       # @param resource [Object]
       # @return [String] the title of given resource
       def guess_title(resource)
-        ModuleUtils.try_to resource, title_field_finder.find
+        resource.try title_field_finder.find
       end
 
       protected

@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2019-10-01
-### Added
+## [0.2.0](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.0) - 2020-02-16
 
 ### Changed
 
-### Removed
+- chore: remove kaminari from dependency but make it work with both kaminari and will_paginate ([#5](https://github.com/wallaby-rails/wallaby-active_record/pull/5))
+- feat: improve querier to allow null, empty string and string matching query ([#4](https://github.com/wallaby-rails/wallaby-active_record/pull/4))
+
+## [0.1.0](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.1.0) - 2019-10-01
+
+### Added
+Extracted code from Wallaby

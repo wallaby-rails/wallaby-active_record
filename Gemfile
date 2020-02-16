@@ -20,5 +20,8 @@ gem 'better_errors'
 gem 'byebug'
 gem 'simplecov'
 
+gem 'kaminari'
+gem 'will_paginate'
+
 gem 'wallaby-cop', path: '/wallaby-cop'
 gem 'wallaby-core', path: '/wallaby-core'

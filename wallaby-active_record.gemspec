@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   ]
 
   spec.add_dependency 'activerecord', '>= 4.2.0'
-  spec.add_dependency 'kaminari'
   spec.add_dependency 'wallaby-core', '~> 0.2.0'
 
   spec.add_development_dependency 'cancancan'

@@ -123,6 +123,38 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
           expect { subject.search(parameters(q: keyword)).to_sql }.to raise_error Wallaby::UnprocessableEntity
         end
       end
+
+      describe 'LIKE %' do
+        context 'when starting' do
+          it 'search text ending with keyword' do
+            keyword = '%keyword'
+            expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (((\"all_postgres_types\".\"color\" ILIKE '%keyword' OR \"all_postgres_types\".\"email\" ILIKE '%keyword') OR \"all_postgres_types\".\"password\" ILIKE '%keyword') OR \"all_postgres_types\".\"string\" ILIKE '%keyword')"
+          end
+        end
+
+        context 'when ending' do
+          it 'search text start with keyword' do
+            keyword = 'keyword%'
+            expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (((\"all_postgres_types\".\"color\" ILIKE 'keyword%' OR \"all_postgres_types\".\"email\" ILIKE 'keyword%') OR \"all_postgres_types\".\"password\" ILIKE 'keyword%') OR \"all_postgres_types\".\"string\" ILIKE 'keyword%')"
+          end
+        end
+      end
+
+      describe 'LIKE _' do
+        context 'when starting' do
+          it 'search text ending with keyword' do
+            keyword = '_keyword'
+            expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (((\"all_postgres_types\".\"color\" ILIKE '_keyword' OR \"all_postgres_types\".\"email\" ILIKE '_keyword') OR \"all_postgres_types\".\"password\" ILIKE '_keyword') OR \"all_postgres_types\".\"string\" ILIKE '_keyword')"
+          end
+        end
+
+        context 'when ending' do
+          it 'search text start with keyword' do
+            keyword = 'keyword_'
+            expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (((\"all_postgres_types\".\"color\" ILIKE 'keyword_' OR \"all_postgres_types\".\"email\" ILIKE 'keyword_') OR \"all_postgres_types\".\"password\" ILIKE 'keyword_') OR \"all_postgres_types\".\"string\" ILIKE 'keyword_')"
+          end
+        end
+      end
     end
 
     describe 'field search' do
