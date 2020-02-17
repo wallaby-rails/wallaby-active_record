@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [TODO]
+
+- Move translation from wallaby-core to here
+
+## [0.2.1](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.1) - 2020-02-17
+
+### Changed
+
+- fix: convert per_page param to integer for will_paginate ([#6](https://github.com/wallaby-rails/wallaby-active_record/pull/6))
+
 ## [0.2.0](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.0) - 2020-02-16
 
 ### Changed
