@@ -32,7 +32,7 @@ module Wallaby
       #   {https://rubydoc.info/gems/wallaby-core/Wallaby/Configuration/Pagination#page_size-instance_method page_size}
       #   Wallaby configuration
       def page_size
-        @params[:per].try(:to_i) || Wallaby.configuration.pagination.page_size
+        (@params[:per] || Wallaby.configuration.pagination.page_size).to_i
       end
 
       # @return [Integer] page number from parameters starting from 1
