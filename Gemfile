@@ -18,7 +18,7 @@ gem 'pundit'
 
 gem 'better_errors'
 gem 'byebug'
-gem 'simplecov'
+gem 'simplecov', '~> 0.17.0'
 
 gem 'kaminari'
 gem 'will_paginate'
