@@ -40,14 +40,11 @@ module Wallaby
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def fields
         @fields ||= ::ActiveSupport::HashWithIndifferentAccess.new.tap do |hash|
-          # NOTE: There is a chance that people create ActiveRecord class
-          # before they do the migration, so initialising the fields will raise
-          # all kinds of error. Therefore, we need to check the table existence
-          if @model_class.table_exists?
-            hash.merge! general_fields
-            hash.merge! association_fields
-            hash.except!(*foreign_keys_from_associations)
-          end
+          next unless ::ActiveRecord::Base.connected? && @model_class.table_exists?
+
+          hash.merge! general_fields
+          hash.merge! association_fields
+          hash.except!(*foreign_keys_from_associations)
         end.freeze
       end
 
