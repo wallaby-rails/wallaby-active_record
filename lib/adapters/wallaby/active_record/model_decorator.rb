@@ -40,6 +40,9 @@ module Wallaby
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def fields
         @fields ||= ::ActiveSupport::HashWithIndifferentAccess.new.tap do |hash|
+          # NOTE: Need to check database and table's existence
+          # before pulling out the metadata from model.
+          # So that the database and migration related task can be executed.
           next unless ::ActiveRecord::Base.connected? && @model_class.table_exists?
 
           hash.merge! general_fields
