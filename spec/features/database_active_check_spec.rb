@@ -15,8 +15,8 @@ describe 'Database active check' do
     let(:model_class) { stub_const 'NotFoundTable', Class.new(ActiveRecord::Base) }
 
     it 'returns empty hash' do
-      expect(::ActiveRecord::Base.connected?).to be_truthy
-      expect(model_class.table_exists?).to be_falsy
+      expect(::ActiveRecord::Base).to be_connected
+      expect(model_class).not_to be_table_exists
       expect(model_decorator.fields).to eq({})
     end
   end
