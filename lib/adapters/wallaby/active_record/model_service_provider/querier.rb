@@ -13,9 +13,9 @@ module Wallaby
           @model_class = @model_decorator.model_class
         end
 
-        # Pull out the query expression string from the parameter `q`,
-        # use parser to understand the expression, then use transformer to run
-        # SQL arel query.
+        # Extract the filter and query information
+        # from parameters `filter` and `q` respectively,
+        # and execute query based on the information.
         # @param params [ActionController::Parameters]
         # @return [ActiveRecord::Relation]
         def search(params)
@@ -28,38 +28,19 @@ module Wallaby
 
         private
 
-        # @see Wallaby::Parser
-        def parser
-          @parser ||= Parser.new
-        end
-
-        # @see Wallaby::ActiveRecord::ModelServiceProvider::Querier::Transformer
-        def transformer
-          @transformer ||= Transformer.new
-        end
-
         # @return [Arel::Table] arel table
         def table
           @model_class.arel_table
         end
 
         # @param params [ActionController::Parameters]
-        # @return [Array<String, Array, Array>] a list of object for other
-        #   method to use.
+        # @return [Array<String, Array, Array>] filter_name, keywords, field_queries
         def extract(params)
-          expressions = to_expressions params
+          expressions = Transformer.new.transform params[:q]
           keywords = expressions.select { |v| v.is_a? String }
-          field_queries = expressions.select { |v| v.is_a? Hash }
+          field_queries = expressions.select { |v| v.is_a? Wrapper }
           filter_name = params[:filter]
           [filter_name, keywords, field_queries]
-        end
-
-        # @param params [ActionController::Parameters]
-        # @return [Array] a list of transformed operations
-        def to_expressions(params)
-          parsed = parser.parse(params[:q] || EMPTY_STRING)
-          converted = transformer.apply parsed
-          converted.is_a?(Array) ? converted : [converted]
         end
 
         # Use the filter name to find out the scope in the following precedents:
@@ -81,25 +62,23 @@ module Wallaby
         end
 
         # Find out the scope for given filter
-        # - from metadata
+        # - from filter metadata
         # - filter name itself
         # @param filter_name [String] filter name
         # @return [String]
         def find_scope(filter_name)
-          filter = @model_decorator.filters[filter_name] || {}
-          filter[:scope] || filter_name
+          @model_decorator.filters[filter_name].try(:[], :scope) || filter_name
         end
 
-        # Unscoped query
-        # @return [ActiveRecord::Relation]
+        # @return [ActiveRecord::Relation] Unscoped query
         def unscoped
           @model_class.where nil
         end
 
-        # Search text for the text columns that appear in `index_field_names`
+        # Search text for the text columns (see {}) in `index_field_names`
         # @param keywords [String] keywords
         # @param query [ActiveRecord::Relation, nil]
-        # @return [ActiveRecord::Relation]
+        # @return [ActiveRecord::Relation, nil]
         def text_search(keywords, query = nil)
           return query unless keywords_check? keywords
 
@@ -121,9 +100,9 @@ module Wallaby
         def field_search(field_queries, query)
           return query unless field_check? field_queries
 
-          field_queries.each do |exp|
-            sub_query = table[exp[:left]].try(exp[:op], exp[:right])
-            query = query.try(:and, sub_query) || sub_query
+          field_queries.each do |exps|
+            sub_queries = build_sub_queries_with exps
+            query = query.try(:and, sub_queries) || sub_queries
           end
           query
         end
@@ -140,21 +119,20 @@ module Wallaby
         end
 
         # @param keywords [Array<String>] a list of keywords
-        # @return [Boolean] false when keywords are empty
-        #   true when text fields for query exist
-        #   otherwise, raise exception
+        # @return [false] when keywords are empty
+        # @return [true] when text fields for query exist
+        # @raise [Wallaby::UnprocessableEntity] if no text columns can be used for text search
         def keywords_check?(keywords)
           return false if keywords.blank?
           return true if text_fields.present?
 
-          message = I18n.t 'errors.unprocessable_entity.keyword_search'
-          raise UnprocessableEntity, message
+          raise UnprocessableEntity, 'Unable to perform keyword search when no text fields can be used for this.'
         end
 
         # @param field_queries [Array]
-        # @return [Boolean] false when field queries are blank
-        #   true when the fields used are valid (exist in `fields`)
-        #   otherwise, raise exception
+        # @return [false] when field queries are blank
+        # @return [true] when field queries are blank
+        # @raise [Wallaby::UnprocessableEntity] if invalid fields are entered
         def field_check?(field_queries)
           return false if field_queries.blank?
 
@@ -162,9 +140,18 @@ module Wallaby
           invalid_fields = fields - @model_decorator.fields.keys
           return true if invalid_fields.blank?
 
-          message = I18n.t 'errors.unprocessable_entity.field_colon_search',
-                           invalid_fields: invalid_fields.to_sentence
-          raise UnprocessableEntity, message
+          raise UnprocessableEntity, "Unable to perform field colon search for #{invalid_fields.to_sentence}"
+        end
+
+        # @param exps [Wallaby::ActiveRecord::ModelServiceProvider::Querier::Wrapper]
+        # @return [ActiveRecord::Relation] sub queries connected using OR
+        def build_sub_queries_with(exps)
+          query = nil
+          exps.each do |exp|
+            sub = table[exp[:left]].try(exp[:op], exp[:right])
+            query = query.try(:or, sub) || sub
+          end
+          query
         end
       end
     end

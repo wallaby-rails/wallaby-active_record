@@ -11,7 +11,7 @@ module Wallaby
       def accessible_for(_action, scope)
         Pundit.policy_scope! user, scope
       rescue Pundit::NotDefinedError
-        Rails.logger.warn I18n.t('errors.pundit.not_found.scope_policy', scope: scope)
+        Rails.logger.warn "Cannot find scope policy for #{scope.inspect}.\nfrom #{__FILE__}:#{__LINE__}"
         scope
       end
     end

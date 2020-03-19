@@ -28,6 +28,7 @@ require 'adapters/wallaby/active_record/model_service_provider/permitter'
 require 'adapters/wallaby/active_record/model_service_provider/querier'
 require 'adapters/wallaby/active_record/model_service_provider/querier/escaper'
 require 'adapters/wallaby/active_record/model_service_provider/querier/transformer'
+require 'adapters/wallaby/active_record/model_service_provider/querier/wrapper'
 require 'adapters/wallaby/active_record/model_service_provider/validator'
 # ModelServiceProvider: end
 
