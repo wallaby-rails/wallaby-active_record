@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move translation from wallaby-core to here
 
+## [0.2.2](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.2) - 2020-03-19
+
+### Changed
+
+- fix: nil must be handled differently in a sequence sub query ([#9](https://github.com/wallaby-rails/wallaby-active_record/pull/9))
+- fix: check database and table's existence before getting the metadata. ([#8](https://github.com/wallaby-rails/wallaby-active_record/pull/8))
+- chore: use simplecov 0.17 for codeclimate report ([#7](https://github.com/wallaby-rails/wallaby-active_record/pull/7))
+
 ## [0.2.1](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.1) - 2020-02-17
 
 ### Changed
