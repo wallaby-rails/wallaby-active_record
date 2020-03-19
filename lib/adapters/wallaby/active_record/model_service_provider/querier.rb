@@ -126,8 +126,7 @@ module Wallaby
           return false if keywords.blank?
           return true if text_fields.present?
 
-          message = I18n.t 'errors.unprocessable_entity.keyword_search'
-          raise UnprocessableEntity, message
+          raise UnprocessableEntity, 'Unable to perform keyword search when no text fields can be used for this.'
         end
 
         # @param field_queries [Array]
@@ -141,9 +140,7 @@ module Wallaby
           invalid_fields = fields - @model_decorator.fields.keys
           return true if invalid_fields.blank?
 
-          message = I18n.t 'errors.unprocessable_entity.field_colon_search',
-                           invalid_fields: invalid_fields.to_sentence
-          raise UnprocessableEntity, message
+          raise UnprocessableEntity, "Unable to perform field colon search for #{invalid_fields.to_sentence}"
         end
 
         # @param exps [Wallaby::ActiveRecord::ModelServiceProvider::Querier::Wrapper]
