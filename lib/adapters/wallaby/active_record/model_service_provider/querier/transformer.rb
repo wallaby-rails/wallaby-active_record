@@ -61,7 +61,7 @@ module Wallaby
               when ':^', ':!^' then "#{right}%"
               when ':$', ':!$' then "%#{right}"
               end
-            { left: lefted, op: operator, right: convert || right }
+            Wrapper.new [{ left: lefted, op: operator, right: convert || right }]
           end
 
           # For operators that have multiple items
@@ -70,9 +70,22 @@ module Wallaby
             operator = SEQUENCE_OPERATORS[oped]
             next unless operator
 
+            exps = Wrapper.new
             lefted = left.try :to_str
-            convert = Range.new right.try(:first), right.try(:last) if %w(:() :!()).include?(oped)
-            { left: lefted, op: operator, right: convert || right }
+            if right.include? nil
+              nil_operator = SIMPLE_OPERATORS[oped]
+              next unless nil_operator
+
+              exps.push left: lefted, op: nil_operator, right: right.delete(nil)
+            end
+            convert = Range.new right.try(:first), right.try(:second) if %w(:() :!()).include?(oped)
+            exps.push left: lefted, op: operator, right: convert || right
+            exps
+          end
+
+          def transform(query_string)
+            result = apply Parser.new.parse(query_string || EMPTY_STRING)
+            result.is_a?(Array) ? result : [result]
           end
         end
       end

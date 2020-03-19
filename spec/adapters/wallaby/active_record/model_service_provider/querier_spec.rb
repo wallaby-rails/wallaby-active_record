@@ -183,7 +183,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
               expect(subject.search(parameters(q: keyword)).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."integer" IN (1, 2)'
 
               keyword = 'integer:=1,nil'
-              expect(subject.search(parameters(q: keyword)).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."integer" IN (1, NULL)'
+              expect(subject.search(parameters(q: keyword)).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE ("all_postgres_types"."integer" IS NULL OR "all_postgres_types"."integer" IN (1))'
             end
           end
 
