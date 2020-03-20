@@ -64,7 +64,7 @@ module Wallaby
           rule left: simple(:left), op: simple(:op), right: simple(:right) do
             oped = op.try :to_str
             operator = SIMPLE_OPERATORS[oped]
-            next Wrapper.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
+            next Transformer.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
 
             lefted = left.try :to_str
             convert =
@@ -80,12 +80,12 @@ module Wallaby
           rule left: simple(:left), op: simple(:op), right: sequence(:right) do
             oped = op.try :to_str
             operator = SEQUENCE_OPERATORS[oped]
-            next Wrapper.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
+            next Transformer.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
 
             exps = Wrapper.new
             lefted = left.try :to_str
             if BETWEEN_OPERATORS[oped] # BETWEEN related operators
-              next Wrapper.warn 'Invalid values for {exp}', instance_values unless right.first && right.second
+              next Transformer.warn 'Invalid values for {exp}', instance_values unless right.first && right.second
 
               convert = Range.new right.first, right.second
               exps.push left: lefted, op: operator, right: convert
