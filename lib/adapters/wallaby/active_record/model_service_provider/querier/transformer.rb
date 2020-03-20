@@ -34,9 +34,21 @@ module Wallaby
             ':!()' => :not_between
           }.freeze
 
+          SEQUENCE_JOIN_OPERATORS = { # :nodoc:
+            ':' => :or,
+            ':=' => :or,
+            ':!' => :and,
+            ':!=' => :and,
+            ':<>' => :and
+          }.freeze
+
+          BETWEEN_OPERATORS = { # :nodoc:
+            ':()' => true,
+            ':!()' => true
+          }.freeze
+
           # For single null
           rule null: simple(:value)
-          rule null: sequence(:value)
 
           # For single boolean
           rule(boolean: simple(:value)) { /true/i.match? value }
@@ -51,8 +63,7 @@ module Wallaby
           rule left: simple(:left), op: simple(:op), right: simple(:right) do
             oped = op.try :to_str
             operator = SIMPLE_OPERATORS[oped]
-            # skip if the operator is unknown
-            next unless operator
+            next Transformer.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
 
             lefted = left.try :to_str
             convert =
@@ -68,24 +79,48 @@ module Wallaby
           rule left: simple(:left), op: simple(:op), right: sequence(:right) do
             oped = op.try :to_str
             operator = SEQUENCE_OPERATORS[oped]
-            next unless operator
+            next Transformer.warn "Unknown operator #{oped} for {exp}", instance_values unless operator
 
             exps = Wrapper.new
             lefted = left.try :to_str
-            if right.include? nil
-              nil_operator = SIMPLE_OPERATORS[oped]
-              next unless nil_operator
+            if BETWEEN_OPERATORS[oped] # BETWEEN related operators
+              next Transformer.warn 'Invalid values for {exp}', instance_values unless right.first && right.second
 
-              exps.push left: lefted, op: nil_operator, right: right.delete(nil)
+              convert = Range.new right.first, right.second
+              exps.push left: lefted, op: operator, right: convert
+            else
+              join = SEQUENCE_JOIN_OPERATORS[oped]
+              if right.include? nil
+                exps.push left: lefted, op: SIMPLE_OPERATORS[oped], right: right.delete(nil), join: join
+              end
+              exps.push left: lefted, op: operator, right: right, join: join
             end
-            convert = Range.new right.try(:first), right.try(:second) if %w(:() :!()).include?(oped)
-            exps.push left: lefted, op: operator, right: convert || right
             exps
           end
 
-          def transform(query_string)
-            result = apply Parser.new.parse(query_string || EMPTY_STRING)
-            result.is_a?(Array) ? result : [result]
+          class << self
+            # @param query_string [String]
+            # @return [Array]
+            def execute(query_string)
+              result = new.apply Parser.new.parse(query_string || EMPTY_STRING)
+              result.is_a?(Array) ? result : [result]
+            end
+
+            # @param message [String]
+            # @param exp [Hash,nil] transformed expression
+            # @return [nil]
+            def warn(message, exp = nil)
+              Rails.logger.warn(
+                "WARNING: #{message}\nfrom #{caller(1, 1).first}".gsub('{exp}', to_origin(exp))
+              )
+              nil
+            end
+
+            # @param exp [Hash,nil] transformed expression
+            # @return [String] origin expression
+            def to_origin(exp)
+              "'#{exp['left']}#{exp['op']}#{exp['right']}'"
+            end
           end
         end
       end
