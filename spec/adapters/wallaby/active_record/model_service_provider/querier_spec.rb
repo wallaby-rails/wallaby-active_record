@@ -226,6 +226,13 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
               else
                 expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE \"all_postgres_types\".\"boolean\" IN ('t', 'f')"
               end
+
+              keyword = 'boolean:=false,nil'
+              if version? '>= 5.2.1'
+                expect(subject.search(parameters(q: keyword)).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE ("all_postgres_types"."boolean" IS NULL OR "all_postgres_types"."boolean" IN (FALSE))'
+              else
+                expect(subject.search(parameters(q: keyword)).to_sql).to eq "SELECT \"all_postgres_types\".* FROM \"all_postgres_types\" WHERE (\"all_postgres_types\".\"boolean\" IS NULL OR \"all_postgres_types\".\"boolean\" IN ('f'))"
+              end
             end
           end
 
@@ -320,6 +327,13 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
                   '>=5.2' => 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."integer" NOT IN (1, 2)'
                 },
                 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE ("all_postgres_types"."integer" NOT IN (1, 2))'
+              )
+              keyword = 'integer:!nil,2'
+              expect(subject.search(parameters(q: keyword)).to_sql).to eq minor(
+                {
+                  '>=5.2' => 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."integer" IS NOT NULL AND "all_postgres_types"."integer" NOT IN (2)'
+                },
+                'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE ("all_postgres_types"."integer" IS NOT NULL AND "all_postgres_types"."integer" NOT IN (2))'
               )
             end
           end
