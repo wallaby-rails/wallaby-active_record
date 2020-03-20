@@ -1,15 +1,48 @@
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelServiceProvider::Querier::Transformer do
-  describe 'simple keywords' do
-    it 'transforms' do
+  describe 'simple null' do
+    it 'returns nil' do
+      expect(subject.apply(null: 'nil')).to be_nil
+      expect(subject.apply([{ null: 'nil' }, { null: 'nil' }])).to eq [nil, nil]
+    end
+  end
+
+  describe 'simple boolean' do
+    it 'returns true' do
+      expect(subject.apply(boolean: 'true')).to be_truthy
+      expect(subject.apply(boolean: 'True')).to be_truthy
+      expect(subject.apply(boolean: 'TRUE')).to be_truthy
+    end
+
+    context 'when false' do
+      it 'returns false' do
+        expect(subject.apply(boolean: 'false')).to be_falsy
+        expect(subject.apply(boolean: 'False')).to be_falsy
+        expect(subject.apply(boolean: 'FALSE')).to be_falsy
+      end
+    end
+  end
+
+  describe 'simple string' do
+    it 'transforms string' do
       expect(subject.apply(string: 'something')).to eq('something')
+    end
+
+    context 'when empty array is provided' do
+      it 'returns empty string' do
+        expect(subject.apply(string: [])).to eq ''
+      end
+    end
+  end
+
+  describe 'sequence strings' do
+    it 'transforms strings' do
       expect(subject.apply([{ string: 'something' }, { string: 'else' }])).to eq(%w(something else))
     end
 
-    context 'when no rules found' do
-      it 'returns nil' do
-        expect(subject.apply(null: [])).to be_nil
+    context 'when empty arrays are provided' do
+      it 'returns empty strings' do
         expect(subject.apply([{ string: [] }, { string: [] }])).to eq(['', ''])
       end
     end

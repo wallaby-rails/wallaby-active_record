@@ -328,6 +328,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Querier do
                 },
                 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE ("all_postgres_types"."integer" NOT IN (1, 2))'
               )
+
               keyword = 'integer:!nil,2'
               expect(subject.search(parameters(q: keyword)).to_sql).to eq minor(
                 {

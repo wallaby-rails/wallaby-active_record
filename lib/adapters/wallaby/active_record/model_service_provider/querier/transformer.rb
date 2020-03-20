@@ -49,7 +49,6 @@ module Wallaby
 
           # For single null
           rule null: simple(:value)
-          rule null: sequence(:value)
 
           # For single boolean
           rule(boolean: simple(:value)) { /true/i.match? value }

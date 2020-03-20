@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move translation from wallaby-core to here
 
+## [0.2.3](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.3) - 2020-03-20
+
+### Changed
+
+- fix: use and to join the conditions for not in ([#10](https://github.com/wallaby-rails/wallaby-active_record/pull/10))
+
 ## [0.2.2](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.2) - 2020-03-19
 
 ### Changed
