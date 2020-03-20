@@ -36,7 +36,7 @@ module Wallaby
         # @param params [ActionController::Parameters]
         # @return [Array<String, Array, Array>] filter_name, keywords, field_queries
         def extract(params)
-          expressions = Transformer.new.transform params[:q]
+          expressions = Transformer.execute params[:q]
           keywords = expressions.select { |v| v.is_a? String }
           field_queries = expressions.select { |v| v.is_a? Wrapper }
           filter_name = params[:filter]
@@ -149,7 +149,7 @@ module Wallaby
           query = nil
           exps.each do |exp|
             sub = table[exp[:left]].try(exp[:op], exp[:right])
-            query = query.try(:or, sub) || sub
+            query = query.try(exp[:join], sub) || sub
           end
           query
         end

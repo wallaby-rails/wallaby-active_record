@@ -4,7 +4,7 @@ module Wallaby
   class ActiveRecord
     class ModelServiceProvider
       class Querier
-        # Build up query using the results
+        # Wrapper for the transform result
         class Wrapper
           attr_reader :list
           delegate :push, :each, to: :list
