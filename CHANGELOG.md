@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Move translation from wallaby-core to here
 
-## [0.2.3](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.3) - 2020-03-20
+## [0.2.4](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.4) - 2020-03-22
 
 ### Changed
 
