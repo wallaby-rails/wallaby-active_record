@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- feat: custom logger to provide better information output to the Rails' log ([#11](https://github.com/wallaby-rails/wallaby-active_record/pull/11))
 - fix: use and to join the conditions for not in ([#10](https://github.com/wallaby-rails/wallaby-active_record/pull/10))
 
 ## [0.2.2](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.2) - 2020-03-19

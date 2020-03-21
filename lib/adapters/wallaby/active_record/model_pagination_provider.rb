@@ -12,7 +12,7 @@ module Wallaby
           # kaminari
           @collection.respond_to?(:total_count) || \
           @collection.respond_to?(:total_entries) # will_paginate
-        Rails.logger.warn "#{@collection.inspect} is not paginatable.\nfrom #{__FILE__}:#{__LINE__}" unless paginatable
+        Logger.warn "#{@collection.inspect} is not paginatable." unless paginatable
 
         paginatable
       end
