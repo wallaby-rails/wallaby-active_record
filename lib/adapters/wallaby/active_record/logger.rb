@@ -2,10 +2,10 @@
 
 module Wallaby
   class ActiveRecord
-    # TODO: move this to wallaby-core later
+    # move this to wallaby-core later
     class Logger
       class << self
-        %w[debug warn info].each do |method_id|
+        %w(debug warn info).each do |method_id|
           define_method method_id do |message, replacements = {}|
             source = caller(replacements.delete(:source) || 1, 1).first
             Rails.logger.public_send(
