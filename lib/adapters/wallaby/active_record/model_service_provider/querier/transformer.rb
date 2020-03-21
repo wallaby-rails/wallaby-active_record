@@ -110,7 +110,7 @@ module Wallaby
             # @param exp [Hash,nil] transformed expression
             # @return [nil]
             def warn(message, exp = nil)
-              Logger.warn message, exp: to_origin(exp), source: 2
+              Logger.warn message, exp: to_origin(exp), sourcing: 2
             end
 
             # @param exp [Hash,nil] transformed expression

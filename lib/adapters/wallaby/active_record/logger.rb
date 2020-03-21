@@ -7,7 +7,7 @@ module Wallaby
       class << self
         %w(debug warn info).each do |method_id|
           define_method method_id do |message, replacements = {}|
-            source = caller(replacements.delete(:source) || 1, 1).first
+            source = caller(replacements.delete(:sourcing).try(:to_i) || 1, 1).first
             Rails.logger.public_send(
               method_id,
               "#{method_id.upcase}: #{format message, replacements}\nfrom #{source}"
