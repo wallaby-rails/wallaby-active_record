@@ -2,21 +2,19 @@ require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelFinder do
   describe '#all' do
-    before do
+    it 'returns valid model classes in alphabetic order' do
       stub_const 'Airport', (Class.new { def self.abstract_class?; false; end })
       stub_const 'Airline', (Class.new { def self.abstract_class?; false; end })
       stub_const 'Airplane', (Class.new { def self.abstract_class?; false; end })
-      stub_const 'Airplane::HABTM_Airports', (Class.new { def self.abstract_class?; false; end })
-      stub_const 'AbstractAirport', (Class.new { def self.abstract_class?; true; end })
-    end
 
-    it 'returns valid model classes in alphabetic order' do
       allow(ActiveRecord::Base).to receive(:descendants).and_return [Airport, Airplane, Airline]
       expect(subject.all).to eq [Airline, Airplane, Airport]
     end
 
     context 'when there is abstract class' do
       it 'filters out abstract class' do
+        stub_const 'AbstractAirport', (Class.new { def self.abstract_class?; true; end })
+
         allow(ActiveRecord::Base).to receive(:descendants).and_return [AbstractAirport]
         expect(subject.all).to be_blank
       end
@@ -24,6 +22,8 @@ describe Wallaby::ActiveRecord::ModelFinder do
 
     context 'when there is HABTM class' do
       it 'filters out HABTM class' do
+        stub_const 'Airplane::HABTM_Airports', (Class.new { def self.abstract_class?; false; end })
+
         allow(ActiveRecord::Base).to receive(:descendants).and_return [Airplane::HABTM_Airports]
         expect(subject.all).to be_blank
       end
@@ -36,6 +36,7 @@ describe Wallaby::ActiveRecord::ModelFinder do
             false
           end
         end
+
         allow(ActiveRecord::Base).to receive(:descendants).and_return [anonymous_class]
         expect(subject.all).to be_blank
       end
