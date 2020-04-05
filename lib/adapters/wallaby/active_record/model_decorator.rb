@@ -4,22 +4,23 @@ module Wallaby
   class ActiveRecord
     # Modal decorator for ActiveRecord
     class ModelDecorator < ::Wallaby::ModelDecorator
-      # Data types to exclude for index page
-      INDEX_EXCLUSIVE_DATA_TYPES =
-        (['', 'medium', 'long'] * 2)
-        .zip(%w(blob text) * 3).map(&:join)
-        .concat(%w(binary citext hstore json jsonb tsvector xml)).freeze
+      # Data types to exclude for {#index_field_names}
+      INDEX_EXCLUSIVE_DATA_TYPES = %w(
+        binary citext hstore json jsonb tsvector xml
+        blob mediumblob longblob text mediumtext longtext
+      ).freeze
 
-      # Class to exclude for show page
+      # Classes to exclude for {#show_field_names}
       SHOW_EXCLUSIVE_CLASS_NAMES = %w(ActiveStorage::Attachment ActiveStorage::Blob).freeze
 
-      # Data types to exclude for form page
+      # Fields to exclude for {#form_field_names}
       FORM_EXCLUSIVE_DATA_TYPES = %w(created_at updated_at).freeze
 
-      # Origin metadata directly coming from ActiveRecord.
+      # Original metadata information of the primative and association fields
+      # pulling out from the ActiveRecord model.
       #
-      # It needs to be frozen so that we can keep the metadata integrity
-      # @example sample fields:
+      # It needs to be frozen so that we can keep the metadata intact.
+      # @example sample fields metadata:
       #   model_decorator.fields
       #   # =>
       #   {
@@ -27,28 +28,29 @@ module Wallaby
       #     id: { name: 'id', type: 'integer', label: 'Id' },
       #     # association field
       #     category: {
-      #       'name' => 'category',
-      #       'type' => 'belongs_to',
-      #       'label' => 'Category',
-      #       'is_association' => true,
-      #       'is_through' => false,
-      #       'has_scope' => false,
-      #       'foreign_key' => 'category_id',
-      #       'class' => Category
+      #       name: 'category',
+      #       type: 'belongs_to',
+      #       label: 'Category',
+      #       is_association: true,
+      #       is_through: false,
+      #       has_scope: false,
+      #       foreign_key: 'category_id',
+      #       class: Category
       #     }
       #   }
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def fields
+        # NOTE: Need to check the database and table's existence before building up the metadata
+        # so that the database creation and migration related task can be executed.
         @fields ||= ::ActiveSupport::HashWithIndifferentAccess.new.tap do |hash|
-          # NOTE: Need to check database and table's existence
-          # before pulling out the metadata from model.
-          # So that the database and migration related task can be executed.
-          next unless ::ActiveRecord::Base.connected? && @model_class.table_exists?
+          next unless @model_class.table_exists?
 
           hash.merge! general_fields
           hash.merge! association_fields
           hash.except!(*foreign_keys_from_associations)
         end.freeze
+      rescue ::ActiveRecord::NoDatabaseError
+        Hash.new({})
       end
 
       # A copy of {#fields} for index page
@@ -86,7 +88,8 @@ module Wallaby
           end.keys
       end
 
-      # @return [Array<String>] a list of field names for form (new/edit) page (note: complex fields are excluded).
+      # @return [Array<String>] a list of field names for form (new/edit) page
+      #   (note: timestamps fields (e.g. created_at/updated_at) and complex relation fields are excluded).
       def form_field_names
         @form_field_names ||=
           form_fields.reject do |field_name, metadata|
@@ -109,9 +112,8 @@ module Wallaby
       # To guess the title for resource.
       #
       # It will go through the fields and try to find out the one that looks
-      # like a name or text to represent this resource. Otherwise, it will fall
+      # like a name or text representing this resource. Otherwise, it will fall
       # back to primary key.
-      #
       # @param resource [Object]
       # @return [String] the title of given resource
       def guess_title(resource)
