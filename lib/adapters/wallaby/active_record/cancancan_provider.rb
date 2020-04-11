@@ -2,7 +2,7 @@
 
 module Wallaby
   class ActiveRecord
-    # Cancancan provider for ActiveRecord
+    # Cancancan provider for {Wallaby::ActiveRecord}
     class CancancanProvider < CancancanAuthorizationProvider
     end
   end

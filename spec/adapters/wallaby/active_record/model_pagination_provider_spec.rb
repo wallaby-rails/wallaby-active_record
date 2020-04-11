@@ -8,7 +8,7 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
     end
 
     it 'returns false when it doesnt use ka' do
-      subject = described_class.new Product.where(nil), parameters
+      subject = described_class.new [], parameters
       expect(subject).not_to be_paginatable
       subject = described_class.new nil, parameters
       expect(subject).not_to be_paginatable

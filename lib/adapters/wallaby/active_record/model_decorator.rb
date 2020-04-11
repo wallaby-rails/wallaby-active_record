@@ -2,7 +2,7 @@
 
 module Wallaby
   class ActiveRecord
-    # Modal decorator for ActiveRecord
+    # Modal decorator for {Wallaby::ActiveRecord}
     class ModelDecorator < ::Wallaby::ModelDecorator
       # Data types to exclude for {#index_field_names}
       INDEX_EXCLUSIVE_DATA_TYPES = %w(

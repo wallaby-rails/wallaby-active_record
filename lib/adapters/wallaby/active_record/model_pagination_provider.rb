@@ -9,19 +9,19 @@ module Wallaby
       # @return [false] if not paginatable
       def paginatable?
         paginatable =
-          # kaminari
-          @collection.respond_to?(:total_count) || \
-          @collection.respond_to?(:total_entries) # will_paginate
-        Logger.warn "#{@collection.inspect} is not paginatable." unless paginatable
+          @collection.respond_to?(:total_count) || # kaminari
+          @collection.respond_to?(:total_entries) || # will_paginate
+          @collection.respond_to?(:unscope) && @collection.respond_to?(:count) # pure ActiveRecord
+        Logger.warn "#{@collection} is not paginatable." unless paginatable
 
         paginatable
       end
 
       # @return [Integer] total count for the collection
       def total
-        # kaminari
-        @collection.try(:total_count) || \
-          @collection.try(:total_entries) # will_paginate
+        @collection.try(:total_count) || # kaminari
+          @collection.try(:total_entries) || # will_paginate
+          @collection.try(:unscope, :offset, :limit).try(:count) # pure ActiveRecord
       end
 
       # @return [Integer] page size from parameters or
