@@ -8,7 +8,7 @@
 [![Inch CI](https://inch-ci.org/github/wallaby-rails/wallaby-active_record.svg?branch=master)](https://inch-ci.org/github/wallaby-rails/wallaby-active_record)
 
 Wallaby::ActiveRecord is the ActiveRecord adapter that implements the [Wallaby::Core](https://github.com/wallaby-rails/wallaby-core)
-interfaces to handle ActiveRecord model/instance in all the CRUD/authorization/pagination operations.
+interfaces to handle ActiveRecord model/instance(s) in all the CRUD/authorization/pagination operations.
 
 ## Install
 
