@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::PunditProvider do
-  let(:context) { instance_double 'context', pundit_user: user }
+  let(:context) { instance_double 'context', pundit_user: user, wallaby_user: user }
   let(:user) { Staff.new }
 
   before { context.extend Pundit }
@@ -11,12 +11,6 @@ describe Wallaby::ActiveRecord::PunditProvider do
       expect(described_class).not_to be_available(nil)
       expect(described_class).not_to be_available(double)
       expect(described_class).to be_available(context)
-    end
-  end
-
-  describe '.args_from' do
-    it 'returns args' do
-      expect(described_class.args_from(context)).to eq user: user
     end
   end
 

@@ -7,6 +7,8 @@
 /spec/reports/
 tmp/
 log/
+.sass-cache/
+deep_cover/
 
 # rspec failure tracking
 .rspec_status

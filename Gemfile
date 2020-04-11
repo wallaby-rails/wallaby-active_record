@@ -18,6 +18,7 @@ gem 'pundit'
 
 gem 'better_errors'
 gem 'byebug'
+gem 'deep-cover'
 gem 'simplecov', '~> 0.17.0'
 
 gem 'kaminari'
