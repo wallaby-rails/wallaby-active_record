@@ -21,8 +21,5 @@ gem 'byebug'
 gem 'deep-cover'
 gem 'simplecov', '~> 0.17.0'
 
-gem 'kaminari'
-gem 'will_paginate'
-
 gem 'wallaby-cop', path: '../wallaby-cop'
 gem 'wallaby-core', path: '../wallaby-core'

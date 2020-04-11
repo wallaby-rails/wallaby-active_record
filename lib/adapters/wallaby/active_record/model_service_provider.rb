@@ -30,17 +30,9 @@ module Wallaby
       # @return [ActiveRecord::Relation] paginated query
       # @see Wallaby::ModelServiceProvider#paginate
       def paginate(query, params)
-        # NOTE: do not take out the `.to_i` as will_paginate requires an integer `per_page`
-        per = per_of params
-        page = page_of params
-        if query.respond_to? :page
-          query = query.page page
-          query = query.per per if query.respond_to? :per # kaminari
-          query = query.per_page per if query.respond_to? :per_page # will_paginate
-        else
-          # native pagination
-          query = query.offset((page - 1) * per).limit(per)
-        end
+        per = (params[:per] || Wallaby.configuration.pagination.page_size).to_i
+        page = [params[:page].to_i, 1].max # starting from page 1
+        query = query.offset((page - 1) * per).limit(per)
         query
       end
 
@@ -105,14 +97,6 @@ module Wallaby
       rescue ::ActiveRecord::ActiveRecordError, ActiveModel::ForbiddenAttributesError, unknown_attribute_error => e
         resource.errors.add :base, e.message
         resource
-      end
-
-      def per_of(params)
-        (params[:per] || Wallaby.configuration.pagination.page_size).to_i
-      end
-
-      def page_of(params)
-        params[:page].try(:to_i) || 1
       end
 
       # Normalize params
