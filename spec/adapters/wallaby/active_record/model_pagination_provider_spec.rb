@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelPaginationProvider do
   describe '#paginatable?' do
-    it 'returns true when it uses kaminari' do
-      subject = described_class.new Product.page(1), parameters
+    it 'returns true when it is a ActiveRecord' do
+      subject = described_class.new Product.where(nil), parameters
       expect(subject).to be_paginatable
     end
 
     it 'returns false when it doesnt use ka' do
-      subject = described_class.new Product.where(nil), parameters
+      subject = described_class.new [], parameters
       expect(subject).not_to be_paginatable
       subject = described_class.new nil, parameters
       expect(subject).not_to be_paginatable
@@ -21,12 +21,11 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
       Product.create name: 'product2'
       Product.create name: 'product3'
 
-      query = Product.page(1)
-      subject = described_class.new Product.page(1), parameters
+      query = Product.where(nil)
+      subject = described_class.new query, parameters
       expect(subject.total).to eq 3
 
-      per_method = query.respond_to?(:per) ? :per : :per_page
-      query = query.public_send(per_method, 1)
+      query = query.offset(0).limit(1)
       subject = described_class.new query, parameters
       expect(subject.total).to eq 3
     end
@@ -37,10 +36,10 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
       Product.create name: 'product1'
       Product.create name: 'product2'
       Product.create name: 'product3'
-      subject = described_class.new Product.page(1), parameters
+      subject = described_class.new Product.where(nil), parameters
       expect(subject.page_size).to eq 20
 
-      subject = described_class.new Product.page(1), parameters(per: 1)
+      subject = described_class.new Product.where(nil), parameters(per: 1)
       expect(subject.page_size).to eq 1
     end
   end
@@ -50,10 +49,10 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
       Product.create name: 'product1'
       Product.create name: 'product2'
       Product.create name: 'product3'
-      subject = described_class.new Product.page(1), parameters
+      subject = described_class.new Product.where(nil), parameters
       expect(subject.page_number).to eq 1
 
-      subject = described_class.new Product.page(1), parameters(page: 2)
+      subject = described_class.new Product.where(nil), parameters(page: 2)
       expect(subject.page_number).to eq 2
     end
   end

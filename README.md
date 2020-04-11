@@ -7,7 +7,8 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/9ba0a610043a2e1a9e74/test_coverage)](https://codeclimate.com/github/wallaby-rails/wallaby-active_record/test_coverage)
 [![Inch CI](https://inch-ci.org/github/wallaby-rails/wallaby-active_record.svg?branch=master)](https://inch-ci.org/github/wallaby-rails/wallaby-active_record)
 
-Wallaby::ActiveRecord is the ActiveRecord adapter for [Wallaby::Core](https://github.com/wallaby-rails/wallaby-core).
+Wallaby::ActiveRecord is the ActiveRecord adapter that implements the [Wallaby::Core](https://github.com/wallaby-rails/wallaby-core)
+interfaces to handle ActiveRecord model/instance(s) in all the CRUD/authorization/pagination operations.
 
 ## Install
 

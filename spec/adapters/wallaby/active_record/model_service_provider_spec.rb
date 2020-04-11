@@ -48,11 +48,13 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
     end
 
     describe '#paginate' do
+      let(:query) { model_class.where(nil) }
+
       it 'paginates the query' do
         if version? '>= 6'
-          expect(subject.paginate(model_class.where(nil), parameters(page: '10', per: '8')).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" LIMIT 8 OFFSET 72'
+          expect(subject.paginate(query, parameters(page: '10', per: '8')).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" LIMIT 8 OFFSET 72'
         else
-          expect(subject.paginate(model_class.where(nil), parameters(page: '10', per: '8')).to_sql).to eq 'SELECT  "all_postgres_types".* FROM "all_postgres_types" LIMIT 8 OFFSET 72'
+          expect(subject.paginate(query, parameters(page: '10', per: '8')).to_sql).to eq 'SELECT  "all_postgres_types".* FROM "all_postgres_types" LIMIT 8 OFFSET 72'
         end
       end
     end

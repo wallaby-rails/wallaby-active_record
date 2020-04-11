@@ -30,11 +30,9 @@ module Wallaby
       # @return [ActiveRecord::Relation] paginated query
       # @see Wallaby::ModelServiceProvider#paginate
       def paginate(query, params)
-        # NOTE: do not take out the `.to_i` as will_paginate requires an integer `per_page`
         per = (params[:per] || Wallaby.configuration.pagination.page_size).to_i
-        query = query.page params[:page] if query.respond_to? :page
-        query = query.per per if query.respond_to? :per # kaminari
-        query = query.per_page per if query.respond_to? :per_page # will_paginate
+        page = [params[:page].to_i, 1].max # starting from page 1
+        query = query.offset((page - 1) * per).limit(per)
         query
       end
 

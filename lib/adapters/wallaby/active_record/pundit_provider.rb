@@ -2,7 +2,7 @@
 
 module Wallaby
   class ActiveRecord
-    # Pundit provider for ActiveRecord
+    # Pundit provider for {Wallaby::ActiveRecord}
     class PunditProvider < PunditAuthorizationProvider
       # Filter a scope
       # @param _action [Symbol, String]
@@ -11,7 +11,7 @@ module Wallaby
       def accessible_for(_action, scope)
         Pundit.policy_scope! user, scope
       rescue Pundit::NotDefinedError
-        Logger.warn "Cannot find scope policy for #{scope.inspect}."
+        Logger.warn "Cannot find scope policy for `#{scope}`."
         scope
       end
     end

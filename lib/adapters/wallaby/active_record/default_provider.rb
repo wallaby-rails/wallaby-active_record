@@ -2,7 +2,7 @@
 
 module Wallaby
   class ActiveRecord
-    # Default provider for ActiveRecord
+    # Default provider for {Wallaby::ActiveRecord}
     class DefaultProvider < DefaultAuthorizationProvider
     end
   end
