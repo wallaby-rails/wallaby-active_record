@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [TODO]
 
+- Consider to move the ActiveRecord related documents (.md files) back to this repo.
 - Review the tests, consider to add request specs.
 
 ## [0.2.5](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.5) - 2020-04-12
