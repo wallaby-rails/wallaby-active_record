@@ -8,7 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [TODO]
 
-- Move translation from wallaby-core to here
+- Consider to move the ActiveRecord related documents (.md files) back to this repo.
+- Review the tests, consider to add request specs.
+
+## [0.2.5](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.5) - 2020-04-12
+
+### Changed
+
+- chore: take out Logger and use the one from wallaby-core and update the documents ([#16](https://github.com/wallaby-rails/wallaby-active_record/pull/16))
+- feat: change to use native ActiveRecord pagination ([#15](https://github.com/wallaby-rails/wallaby-active_record/pull/15))
+- chore: update the specs for authorizer changes ([#14](https://github.com/wallaby-rails/wallaby-active_record/pull/14))
 
 ## [0.2.4](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.4) - 2020-03-22
 
