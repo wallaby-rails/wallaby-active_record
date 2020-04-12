@@ -11,10 +11,10 @@ module Wallaby
           PCT = '%' # :nodoc:
 
           class << self
-            # @example Return the escaped keyword if the first or last charater of the keyword is `%` or `_`
+            # @example Return the escaped keyword if the first/last char of the keyword is `%`/`_`
             #   Wallaby::ActiveRecord::ModelServiceProvider::Querier::Escaper.execute('%something_else%')
             #   # => '%something\_else%'
-            # @example Return the escaped keyword wrapped with `%` if the first or last charater of the keyword is NOT `%` or `_`
+            # @example Return the escaped keyword wrapped with `%` if the first/last char of the keyword is NOT `%`/`_`
             #   Wallaby::ActiveRecord::ModelServiceProvider::Querier::Escaper.execute('keyword')
             #   # => '%keyword%'
             # @param keyword [String]
