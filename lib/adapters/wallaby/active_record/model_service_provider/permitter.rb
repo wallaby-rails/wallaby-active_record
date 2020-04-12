@@ -3,7 +3,7 @@
 module Wallaby
   class ActiveRecord
     class ModelServiceProvider
-      # Filter the params
+      # Whitelist the params for mass-assignment
       class Permitter
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)

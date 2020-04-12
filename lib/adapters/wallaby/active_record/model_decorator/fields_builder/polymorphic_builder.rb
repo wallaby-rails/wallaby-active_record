@@ -19,7 +19,7 @@ module Wallaby
             end
           end
 
-          private
+          protected
 
           # @param reflection [ActiveRecord::Reflection]
           # @return [Array<Class>] a list of classes for this polymorphism
@@ -38,7 +38,8 @@ module Wallaby
 
           # @param model_class [Class]
           # @param polymorphic_name [String] polymorphic name
-          # @return [Boolean] if polymorphism defined?
+          # @return [true] if polymorphism defined?
+          # @return [false] otherwise
           def polymorphic_defined?(model_class, polymorphic_name)
             polymorphic_name_sym = polymorphic_name.try(:to_sym)
             model_class.reflections.any? do |_field_name, reflection|

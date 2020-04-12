@@ -22,7 +22,7 @@ module Wallaby
             metadata[:sti_class_list] = sti_list(find_sti_parent_of(@model_class))
           end
 
-          private
+          protected
 
           # Return the alphabet-order STI list
           # by traversing the inheritance tree for given model.

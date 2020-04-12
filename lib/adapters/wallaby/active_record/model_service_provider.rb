@@ -8,7 +8,6 @@ module Wallaby
       # @param action [String, Symbol]
       # @param authorizer
       # @return [ActionController::Parameters] whitelisted parameters
-      # @see Wallaby::ModelServiceProvider#permit
       def permit(params, action, authorizer)
         authorized_fields = authorizer.permit_params action, @model_class
         params.require(param_key).permit(authorized_fields || permitted_fields)
@@ -18,7 +17,6 @@ module Wallaby
       # @param params [ActionController::Parameters]
       # @param authorizer [Ability] for now
       # @return [ActiveRecord::Relation] relation
-      # @see Wallaby::ModelServiceProvider#collection
       def collection(params, authorizer)
         query = querier.search params
         query = query.order params[:sort] if params[:sort].present?
@@ -28,7 +26,6 @@ module Wallaby
       # @param query [ActiveRecord::Relation]
       # @param params [ActionController::Parameters]
       # @return [ActiveRecord::Relation] paginated query
-      # @see Wallaby::ModelServiceProvider#paginate
       def paginate(query, params)
         per = (params[:per] || Wallaby.configuration.pagination.page_size).to_i
         page = [params[:page].to_i, 1].max # starting from page 1
@@ -38,7 +35,6 @@ module Wallaby
 
       # @note No mass assignment happens here!
       # @return [Object] new resource object
-      # @see Wallaby::ModelServiceProvider#new
       def new(_params, _authorizer)
         @model_class.new
       end
@@ -48,7 +44,6 @@ module Wallaby
       # @param id [Integer, String]
       # @return [Object] persisted resource object
       # @raise [Wallaby::ResourceNotFound] when record is not found
-      # @see Wallaby::ModelServiceProvider#find
       def find(id, _params, _authorizer)
         @model_class.find id
       rescue ::ActiveRecord::RecordNotFound
@@ -59,7 +54,6 @@ module Wallaby
       # @param resource [Object]
       # @param params [ActionController::Parameters]
       # @param authorizer [Wallaby::ModelAuthorizer]
-      # @see Wallaby::ModelServiceProvider#create
       def create(resource, params, authorizer)
         save __callee__, resource, params, authorizer
       end
@@ -68,14 +62,12 @@ module Wallaby
       # @param resource [Object]
       # @param params [ActionController::Parameters]
       # @param authorizer [Wallaby::ModelAuthorizer]
-      # @see Wallaby::ModelServiceProvider#update
       def update(resource, params, authorizer)
         save __callee__, resource, params, authorizer
       end
 
       # Remove a record from database
       # @param resource [Object]
-      # @see Wallaby::ModelServiceProvider#destroy
       def destroy(resource, _params, _authorizer)
         resource.destroy
       end
@@ -107,7 +99,8 @@ module Wallaby
 
       # See if a resource is valid
       # @param resource [Object]
-      # @return [Boolean]
+      # @return [true] if valid
+      # @return [false] otherwise
       def valid?(resource)
         validator.valid? resource
       end
@@ -135,22 +128,22 @@ module Wallaby
           permitter.simple_field_names << permitter.compound_hashed_fields
       end
 
-      # @see Wallaby::ModelServiceProvider::Permitter
+      # @return [Wallaby::ActiveRecord::ModelServiceProvider::Permitter]
       def permitter
         @permitter ||= Permitter.new @model_decorator
       end
 
-      # @see Wallaby::ModelServiceProvider::Querier
+      # @return [Wallaby::ActiveRecord::ModelServiceProvider::Querier]
       def querier
         @querier ||= Querier.new @model_decorator
       end
 
-      # @see Wallaby::ModelServiceProvider::Normalizer
+      # @return [Wallaby::ActiveRecord::ModelServiceProvider::Normalizer]
       def normalizer
         @normalizer ||= Normalizer.new @model_decorator
       end
 
-      # @see Wallaby::ModelServiceProvider::Validator
+      # @return [Wallaby::ActiveRecord::ModelServiceProvider::Validator]
       def validator
         @validator ||= Validator.new @model_decorator
       end

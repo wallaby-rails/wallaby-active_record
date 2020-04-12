@@ -4,7 +4,7 @@ module Wallaby
   class ActiveRecord
     class ModelDecorator
       class FieldsBuilder
-        # To build the metadata for associations
+        # To build the metadata for associations fields
         class AssociationBuilder
           # Update the metadata
           # @param metadata [Hash]
@@ -18,7 +18,7 @@ module Wallaby
             metadata[:foreign_key] = foreign_key_for(reflection, type)
           end
 
-          private
+          protected
 
           # @param reflection [ActiveRecord::Reflection]
           # @param type [Symbol]
@@ -35,13 +35,15 @@ module Wallaby
           end
 
           # @param reflection [ActiveRecord::Reflection]
-          # @return [Boolean] whether it's a through relation
+          # @return [true] if it's a through relation
+          # @return [false] otherwise
           def through?(reflection)
             reflection.is_a? ::ActiveRecord::Reflection::ThroughReflection
           end
 
           # @param reflection [ActiveRecord::Reflection]
-          # @return [Boolean] whether it has scope
+          # @return [true] if it has scope
+          # @return [false] otherwise
           def scope?(reflection)
             reflection.scope.present?
           end

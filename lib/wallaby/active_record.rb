@@ -6,7 +6,6 @@ require 'wallaby/active_record/version'
 
 # All files required for ActiveRecord ORM
 require 'adapters/wallaby/active_record'
-require 'adapters/wallaby/active_record/logger'
 require 'adapters/wallaby/active_record/model_finder'
 
 # ModelPaginationProvider: begin

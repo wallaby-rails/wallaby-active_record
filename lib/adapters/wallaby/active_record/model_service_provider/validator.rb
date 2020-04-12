@@ -3,7 +3,7 @@
 module Wallaby
   class ActiveRecord
     class ModelServiceProvider
-      # Validator
+      # Validate values for record create / update
       class Validator
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)
@@ -11,7 +11,8 @@ module Wallaby
         end
 
         # @param resource [Object] resource object
-        # @return [Boolean] whether the resource object is valid
+        # @return [true] if the resource object is valid
+        # @return [false] otherwise
         def valid?(resource)
           resource.attributes.each do |field_name, values|
             metadata = @model_decorator.fields[field_name]
@@ -22,10 +23,11 @@ module Wallaby
           resource.errors.blank?
         end
 
-        private
+        protected
 
         # @param values [Array]
-        # @return [Boolean] whether the values are valid range values
+        # @return [true] if the values are valid range values
+        # @return [false] otherwise
         def valid_range_type?(values, metadata)
           !metadata \
             || !%w(daterange tsrange tstzrange).include?(metadata[:type]) \

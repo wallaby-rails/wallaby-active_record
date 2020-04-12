@@ -3,7 +3,7 @@
 module Wallaby
   class ActiveRecord
     class ModelDecorator
-      # To search and build the metadata for fields
+      # To build the metadata for fields
       class FieldsBuilder
         # @param model_class [Class]
         def initialize(model_class)
@@ -22,7 +22,8 @@ module Wallaby
           end
         end
 
-        # @return [Hash<String, Hash>] a hash for general fields
+        # @return [Hash<String, Hash>] a hash for association fields
+        #   (e.g. belongs_to / has_one / has_many / has_and_belongs_to_many)
         def association_fields
           @model_class.reflections.each_with_object({}) do |(name, ref), fields|
             metadata = {

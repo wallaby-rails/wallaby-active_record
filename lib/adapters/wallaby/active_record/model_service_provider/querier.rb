@@ -26,7 +26,7 @@ module Wallaby
           scope.where query
         end
 
-        private
+        protected
 
         # @return [Arel::Table] arel table
         def table

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Wallaby
-  # The ActiveRecord mode that implements the interfaces
+  # The Wallaby::ActiveRecord mode that implements the {Wallaby::Core} interfaces
   # to handle ActiveRecord model/instance in all CRUD operations
   class ActiveRecord < Mode
   end

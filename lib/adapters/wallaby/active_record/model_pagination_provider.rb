@@ -8,20 +8,17 @@ module Wallaby
       # @return [true] if paginatable
       # @return [false] if not paginatable
       def paginatable?
-        paginatable = @collection.respond_to?(:unscope) && @collection.respond_to?(:count)
-        Logger.warn "#{@collection} is not paginatable." unless paginatable
-
-        paginatable
+        (@collection.respond_to?(:unscope) && @collection.respond_to?(:count)).tap do |paginatable|
+          Logger.warn "#{@collection} is not paginatable." unless paginatable
+        end
       end
 
       # @return [Integer] total count for the collection
       def total
-        @collection.try(:unscope, :offset, :limit).try(:count)
+        @collection.unscope(:offset, :limit).count
       end
 
-      # @return [Integer] page size from parameters or
-      #   {https://rubydoc.info/gems/wallaby-core/Wallaby/Configuration/Pagination#page_size-instance_method page_size}
-      #   Wallaby configuration
+      # @return [Integer] page size from parameters or Wallaby configuration
       def page_size
         (@params[:per] || Wallaby.configuration.pagination.page_size).to_i
       end

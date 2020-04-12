@@ -11,6 +11,14 @@ module Wallaby
           PCT = '%' # :nodoc:
 
           class << self
+            # @example Return the escaped keyword if the first/last char of the keyword is `%`/`_`
+            #   Wallaby::ActiveRecord::ModelServiceProvider::Querier::Escaper.execute('%something_else%')
+            #   # => '%something\_else%'
+            # @example Return the escaped keyword wrapped with `%` if the first/last char of the keyword is NOT `%`/`_`
+            #   Wallaby::ActiveRecord::ModelServiceProvider::Querier::Escaper.execute('keyword')
+            #   # => '%keyword%'
+            # @param keyword [String]
+            # @return [String] escaped string for LIKE query
             def execute(keyword)
               first = keyword.first
               last = keyword.last
@@ -23,6 +31,12 @@ module Wallaby
               "#{starting}#{escaped}#{ending}"
             end
 
+            protected
+
+            # @param first_condition [Boolean] first condition
+            # @param first_char [Boolean] first char
+            # @param second_condition [nil, String] second condition
+            # @param default_sign [String]
             def sign(
               first_condition, first_char, second_condition, default_sign = PCT
             )
