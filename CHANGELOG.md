@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consider to move the ActiveRecord related documents (.md files) back to this repo.
 - Review the tests, consider to add request specs.
 
+## [0.2.6](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.6) - 2020-04-19
+
+### Changed
+
+- chore: filter out the classes that have invalid class name, e.g. primary::SchemaMigration ([#19](https://github.com/wallaby-rails/wallaby-active_record/pull/19))
+- fix: make sure index/show/form fields returns empty hash when database or table doesn't exist ([#18](https://github.com/wallaby-rails/wallaby-active_record/pull/18))
+
 ## [0.2.5](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.5) - 2020-04-12
 
 ### Changed
