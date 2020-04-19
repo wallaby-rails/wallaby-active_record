@@ -15,17 +15,28 @@ module Wallaby
           defined?(::ApplicationRecord) && model_class == ::ApplicationRecord ||
             model_class.abstract_class? ||
             anonymous?(model_class) ||
-            model_class.name.index('HABTM')
+            model_class.name.index('HABTM') ||
+            invalid_class_name?(model_class)
         end.sort_by(&:to_s)
       end
 
       protected
 
+      # @param model_class [Class]
       # @see Wallaby::ModuleUtils.anonymous_class?
       def anonymous?(model_class)
         ModuleUtils.anonymous_class?(model_class).tap do |result|
           Logger.warn "Anonymous class is detected for table #{model_class.try :table_name}" if result
         end
+      end
+
+      # To exclude classes that have invalid class name, e.g. **primary::SchemaMigration** from Rails test
+      # @param model_class [Class]
+      def invalid_class_name?(model_class)
+        model_class.name.constantize
+        false
+      rescue NameError
+        true
       end
     end
   end
