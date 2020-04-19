@@ -43,14 +43,14 @@ module Wallaby
         # NOTE: Need to check the database and table's existence before building up the metadata
         # so that the database creation and migration related task can be executed.
         @fields ||= ::ActiveSupport::HashWithIndifferentAccess.new.tap do |hash|
-          next unless @model_class.table_exists?
+          next hash.default = {} unless @model_class.table_exists?
 
           hash.merge! general_fields
           hash.merge! association_fields
           hash.except!(*foreign_keys_from_associations)
         end.freeze
       rescue ::ActiveRecord::NoDatabaseError
-        Hash.new({})
+        Hash.new({}).with_indifferent_access
       end
 
       # A copy of {#fields} for index page
