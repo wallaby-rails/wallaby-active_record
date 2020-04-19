@@ -48,6 +48,7 @@ describe Wallaby::ActiveRecord::ModelFinder do
           def self.abstract_class?
             false
           end
+
           def self.name
             'primary::SchemaMigration'
           end
