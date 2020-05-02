@@ -32,6 +32,13 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
   end
 
   describe '#page_size' do
+    around do |example|
+      RequestStore.store[:wallaby_controller] = Wallaby::ResourcesController
+      example.run
+      RequestStore.store[:wallaby_controller].clear
+      RequestStore.store[:wallaby_controller] = nil
+    end
+
     it 'returns the count' do
       Product.create name: 'product1'
       Product.create name: 'product2'
