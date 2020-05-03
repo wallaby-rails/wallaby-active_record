@@ -27,7 +27,7 @@ module Wallaby
       # @param params [ActionController::Parameters]
       # @return [ActiveRecord::Relation] paginated query
       def paginate(query, params)
-        per = (params[:per] || Wallaby.configuration.pagination.page_size).to_i
+        per = (params[:per] || Wallaby.controller_configuration.try(:page_size)).to_i
         page = [params[:page].to_i, 1].max # starting from page 1
         query = query.offset((page - 1) * per).limit(per)
         query
