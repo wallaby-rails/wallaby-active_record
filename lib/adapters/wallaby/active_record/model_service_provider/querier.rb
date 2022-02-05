@@ -53,11 +53,13 @@ module Wallaby
           valid_filter_name =
             FilterUtils.filter_name_by(filter_name, @model_decorator.filters)
           scope = find_scope(valid_filter_name)
-          if scope.blank? then unscoped
-          elsif scope.is_a?(Proc) then @model_class.instance_exec(&scope)
+          return unscoped if scope.blank?
+
+          if scope.is_a?(Proc) then @model_class.instance_exec(&scope)
           elsif @model_class.respond_to?(scope)
             @model_class.public_send(scope)
-          else unscoped
+          else
+            unscoped
           end
         end
 
@@ -136,7 +138,7 @@ module Wallaby
         def field_check?(field_queries)
           return false if field_queries.blank?
 
-          fields = field_queries.map { |exp| exp[:left] }
+          fields = field_queries.pluck(:left)
           invalid_fields = fields - @model_decorator.fields.keys
           return true if invalid_fields.blank?
 

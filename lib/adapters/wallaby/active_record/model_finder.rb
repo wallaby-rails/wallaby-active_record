@@ -12,7 +12,7 @@ module Wallaby
       # @return [Array<Class>]
       def all
         ::ActiveRecord::Base.descendants.reject do |model_class|
-          defined?(::ApplicationRecord) && model_class == ::ApplicationRecord ||
+          application_record?(model_class) ||
             model_class.abstract_class? ||
             anonymous?(model_class) ||
             model_class.name.index('HABTM') ||
@@ -21,6 +21,10 @@ module Wallaby
       end
 
       protected
+
+      def application_record?(model_class)
+        defined?(::ApplicationRecord) && model_class == ::ApplicationRecord
+      end
 
       # @param model_class [Class]
       # @see Wallaby::ModuleUtils.anonymous_class?

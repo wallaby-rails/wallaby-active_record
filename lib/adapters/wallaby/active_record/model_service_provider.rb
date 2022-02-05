@@ -29,8 +29,7 @@ module Wallaby
       def paginate(query, params)
         per = (params[:per] || Wallaby.controller_configuration.try(:page_size)).to_i
         page = [params[:page].to_i, 1].max # starting from page 1
-        query = query.offset((page - 1) * per).limit(per)
-        query
+        query.offset((page - 1) * per).limit(per)
       end
 
       # @note No mass assignment happens here!

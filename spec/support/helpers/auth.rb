@@ -1,6 +1,6 @@
 module Auth
   def cancancan_context(ability)
-    OpenStruct.new current_ability: ability
+    Struct.new(:current_ability).new(ability)
   end
 
   def cancancan_authorzier(ability, model_class)
