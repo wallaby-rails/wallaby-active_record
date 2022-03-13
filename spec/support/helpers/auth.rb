@@ -4,7 +4,7 @@ module Auth
   end
 
   def cancancan_authorzier(ability, model_class)
-    Wallaby::ModelAuthorizer.new cancancan_context(ability), model_class
+    Wallaby::ModelAuthorizer.create cancancan_context(ability), model_class
   end
 end
 
