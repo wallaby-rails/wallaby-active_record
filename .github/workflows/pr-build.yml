@@ -46,7 +46,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         # NOTE: check the versions that Ruby supports at https://www.ruby-lang.org/en/downloads/branches/
-        ruby: ['2.7', '3.0']
+        ruby: ['2.7', '3.0', '3.1']
         # NOTE: check the versions that Rails supports at https://guides.rubyonrails.org/maintenance_policy.html
         rails: ['7.0', '6.1', '6.0']
     steps:
