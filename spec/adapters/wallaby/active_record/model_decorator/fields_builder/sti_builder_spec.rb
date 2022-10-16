@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::StiBuilder do
@@ -6,7 +7,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::StiBuilder do
   context 'when not sti' do
     let(:model_class) do
       Class.new(ActiveRecord::Base) do
-        def self.name; 'Product'; end
+        def self.name
+          'Product'
+        end
         self.table_name = 'products'
       end
     end
@@ -20,7 +23,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::StiBuilder do
     context 'when or not the sti column' do
       let(:model_class) do
         Class.new(ActiveRecord::Base) do
-          def self.name; 'Person'; end
+          def self.name
+            'Person'
+          end
           self.table_name = 'people'
         end
       end
@@ -36,12 +41,16 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::StiBuilder do
   context 'when sti column' do
     let(:model_class) do
       Class.new(ActiveRecord::Base) do
-        def self.name; 'Person'; end
+        def self.name
+          'Person'
+        end
         self.table_name = 'people'
       end
     end
 
-    before { allow(model_class).to receive(:descendants).and_return([Staff, HumanResource::Manager]) }
+    before do
+      allow(model_class).to receive(:descendants).and_return([Staff, HumanResource::Manager])
+    end
 
     it 'does not change metadata' do
       metadata = {}
@@ -53,13 +62,17 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::StiBuilder do
     context 'when sti column is different' do
       let(:model_class) do
         Class.new(ActiveRecord::Base) do
-          def self.name; 'Thing'; end
+          def self.name
+            'Thing'
+          end
           self.table_name = 'things'
           self.inheritance_column = 'sti_type'
         end
       end
 
-      before { allow(model_class).to receive(:descendants).and_return([Apple]) }
+      before do
+        allow(model_class).to receive(:descendants).and_return([Apple])
+      end
 
       it 'does not change metadata' do
         metadata = {}

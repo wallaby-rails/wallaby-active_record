@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Auth
   def cancancan_context(ability)
     Struct.new(:current_ability).new(ability)

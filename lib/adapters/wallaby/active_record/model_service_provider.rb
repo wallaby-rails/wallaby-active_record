@@ -19,7 +19,7 @@ module Wallaby
       # @return [ActiveRecord::Relation] relation
       def collection(params, authorizer)
         query = querier.search params
-        query = query.order params[:sort] if params[:sort].present?
+        query = query.order params[:sort] if params[:sort].present? # rubocop:disable CodeReuse/ActiveRecord
         authorizer.accessible_for :index, query
       end
 
@@ -29,7 +29,7 @@ module Wallaby
       def paginate(query, params)
         per = (params[:per] || Wallaby.controller_configuration.try(:page_size)).to_i
         page = [params[:page].to_i, 1].max # starting from page 1
-        query.offset((page - 1) * per).limit(per)
+        query.offset((page - 1) * per).limit(per) # rubocop:disable CodeReuse/ActiveRecord
       end
 
       # @note No mass assignment happens here!

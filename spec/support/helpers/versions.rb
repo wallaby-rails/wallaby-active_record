@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Versions
   def minor(results, other = nil)
     results[Rails::VERSION::MAJOR].try(:[], Rails::VERSION::MINOR) || tiny(results, other)

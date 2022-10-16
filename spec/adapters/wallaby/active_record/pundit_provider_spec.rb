@@ -1,10 +1,13 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::PunditProvider do
   let(:context) { instance_double 'context', pundit_user: user, wallaby_user: user }
   let(:user) { Staff.new }
 
-  before { context.extend Pundit }
+  before do
+    context.extend Pundit
+  end
 
   describe '.available?' do
     it 'returns true' do
@@ -30,19 +33,33 @@ describe Wallaby::ActiveRecord::PunditProvider do
 
     before do
       stub_const 'ProductPolicy', (Class.new(Struct.new(:user, :product)) do
-        def index?; false; end
+        def index?
+          false
+        end
 
-        def destroy?; false; end
+        def destroy?
+          false
+        end
 
-        def show?; true; end
+        def show?
+          true
+        end
 
-        def new?; true; end
+        def new?
+          true
+        end
 
-        def create?; true; end
+        def create?
+          true
+        end
 
-        def edit?; true; end
+        def edit?
+          true
+        end
 
-        def update?; true; end
+        def update?
+          true
+        end
 
         def attributes_for
           { featured: false }
@@ -62,7 +79,9 @@ describe Wallaby::ActiveRecord::PunditProvider do
       end)
 
       stub_const 'ProductPolicy::Scope', (Class.new(Struct.new(:user, :scope)) do
-        def resolve; scope; end
+        def resolve
+          scope
+        end
       end)
     end
 

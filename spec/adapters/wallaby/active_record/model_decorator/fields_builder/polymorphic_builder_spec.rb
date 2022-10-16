@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::PolymorphicBuilder do
@@ -7,7 +8,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::PolymorphicBuilde
     let(:model_class) do
       Class.new(ActiveRecord::Base) do
         self.table_name = 'products'
-        def self.name; 'Product'; end
+        def self.name
+          'Product'
+        end
       end
     end
 
@@ -22,7 +25,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::PolymorphicBuilde
     let(:model_class) do
       Class.new(ActiveRecord::Base) do
         self.table_name = 'pictures'
-        def self.name; 'Picture'; end
+        def self.name
+          'Picture'
+        end
       end
     end
 

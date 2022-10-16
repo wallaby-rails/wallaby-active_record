@@ -18,7 +18,7 @@ module Wallaby
             type = metadata[:type].try(:[], /range|point|binary/)
             next unless type
 
-            public_send "normalize_#{type}_values", params, field_name, values
+            try "normalize_#{type}_values", params, field_name, values
           end
           params
         end

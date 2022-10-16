@@ -15,7 +15,7 @@ module Wallaby
 
       # @return [Integer] total count for the collection
       def total
-        @collection.unscope(:offset, :limit).count
+        @collection.unscope(:offset, :limit).count # rubocop:disable CodeReuse/ActiveRecord
       end
 
       # @return [Integer] page size from parameters or Wallaby configuration

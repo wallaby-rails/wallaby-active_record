@@ -93,8 +93,10 @@ module Wallaby
               if right.include? nil
                 exps.push left: lefted, op: SIMPLE_OPERATORS[oped], right: right.delete(nil), join: join
               end
+
               exps.push left: lefted, op: operator, right: right, join: join
             end
+
             exps
           end
 
