@@ -26,7 +26,7 @@ module Wallaby
           field_names =
             range_fields.keys +
             many_association_fields.map { |_, metadata| metadata[:foreign_key] }
-          field_names.index_with { |name| [] }
+          field_names.each_with_object({}) { |name, hash| hash[name] = [] }
         end
 
         protected
@@ -55,7 +55,7 @@ module Wallaby
         #   - has_many
         #   - has_and_belongs_to_many
         def many_association_fields
-          association_fields.select { |_, metadata| metadata[:type].include?('many') }
+          association_fields.select { |_, metadata| metadata[:type].try(:include?, 'many') }
         end
 
         # @return [Array<String>] a list of belongs_to association field names

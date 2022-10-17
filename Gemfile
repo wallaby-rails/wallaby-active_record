@@ -7,7 +7,7 @@ ruby '2.7.1'
 # Specify your gem's dependencies in wallaby-active_record.gemspec
 gemspec
 
-gem 'rails', '~> 7.0.1'
+gem 'rails'
 # gem 'rails', '~> 4.2.0'
 
 gem 'mysql2'
@@ -21,7 +21,7 @@ gem 'pundit'
 gem 'better_errors'
 gem 'byebug'
 gem 'deep-cover'
-gem 'simplecov'
+gem 'simplecov', '~> 0.17.0'
 
 gem 'wallaby-cop', path: '../wallaby-cop'
 gem 'wallaby-core', path: '../wallaby-core'

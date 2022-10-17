@@ -30,7 +30,7 @@ module Wallaby
         # @return [false] otherwise
         def valid_range_type?(values, metadata)
           !metadata \
-            || %w[daterange tsrange tstzrange].exclude?(metadata[:type]) \
+            || !%w[daterange tsrange tstzrange].include?(metadata[:type]) \
             || !values.try(:any?, &:blank?)
         end
       end

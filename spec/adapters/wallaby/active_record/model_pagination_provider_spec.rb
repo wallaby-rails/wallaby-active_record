@@ -38,7 +38,7 @@ describe Wallaby::ActiveRecord::ModelPaginationProvider do
       Product.create name: 'product2'
       Product.create name: 'product3'
       subject = described_class.new Product.where(nil), parameters
-      expect(subject.page_size).to eq 20
+      expect(subject.page_size).to be_nil
 
       subject = described_class.new Product.where(nil), parameters(per: 1)
       expect(subject.page_size).to eq 1

@@ -138,7 +138,7 @@ module Wallaby
         def field_check?(field_queries)
           return false if field_queries.blank?
 
-          fields = field_queries.pluck(:left) # rubocop:disable CodeReuse/ActiveRecord
+          fields = field_queries.map { |exp| exp[:left] } # rubocop:disable Rails/Pluck
           invalid_fields = fields - @model_decorator.fields.keys
           return true if invalid_fields.blank?
 
