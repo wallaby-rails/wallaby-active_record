@@ -55,7 +55,7 @@ module Wallaby
         #   - has_many
         #   - has_and_belongs_to_many
         def many_association_fields
-          association_fields.select { |_, metadata| metadata[:type].try(:include?, 'many') }
+          association_fields.select { |_, metadata| metadata[:type].include?('many') }
         end
 
         # @return [Array<String>] a list of belongs_to association field names
