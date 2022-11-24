@@ -5,7 +5,7 @@ module Wallaby
     class ModelDecorator
       # Try to find the field that can be used as title
       class TitleFieldFinder
-        TITLE_FIELD_TYPES = %w(string).freeze
+        TITLE_FIELD_TYPES = %w[string].freeze
 
         # @param model_class [Class]
         # @param fields [Hash] fields metadata

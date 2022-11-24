@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.7.1'
+ruby '2.7.6'
 
 # Specify your gem's dependencies in wallaby-active_record.gemspec
 gemspec

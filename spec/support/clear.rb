@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 RSpec.configure do |config|
   config.before do
     Wallaby.configuration.resources_controller.try(:clear)
     Wallaby.configuration.clear
     Wallaby::Map.clear
-    RequestStore
   end
 
   config.around :suite do |example|

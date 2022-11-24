@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 module Auth
   def cancancan_context(ability)
-    OpenStruct.new current_ability: ability
+    Struct.new(:current_ability).new(ability)
   end
 
   def cancancan_authorzier(ability, model_class)
-    Wallaby::ModelAuthorizer.new cancancan_context(ability), model_class
+    Wallaby::ModelAuthorizer.create cancancan_context(ability), model_class
   end
 end
 

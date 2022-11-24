@@ -5,7 +5,7 @@ module Wallaby
     class ModelServiceProvider
       # Query builder
       class Querier
-        TEXT_FIELDS = %w(string text citext longtext tinytext mediumtext).freeze
+        TEXT_FIELDS = %w[string text citext longtext tinytext mediumtext].freeze
 
         # @param model_decorator [Wallaby::ModelDecorator]
         def initialize(model_decorator)
@@ -23,7 +23,7 @@ module Wallaby
           scope = filtered_by filter_name
           query = text_search keywords
           query = field_search field_queries, query
-          scope.where query
+          scope.where query # rubocop:disable CodeReuse/ActiveRecord
         end
 
         protected
@@ -53,11 +53,13 @@ module Wallaby
           valid_filter_name =
             FilterUtils.filter_name_by(filter_name, @model_decorator.filters)
           scope = find_scope(valid_filter_name)
-          if scope.blank? then unscoped
-          elsif scope.is_a?(Proc) then @model_class.instance_exec(&scope)
+          return unscoped if scope.blank?
+
+          if scope.is_a?(Proc) then @model_class.instance_exec(&scope)
           elsif @model_class.respond_to?(scope)
-            @model_class.public_send(scope)
-          else unscoped
+            @model_class.try(scope)
+          else
+            unscoped
           end
         end
 
@@ -72,7 +74,7 @@ module Wallaby
 
         # @return [ActiveRecord::Relation] Unscoped query
         def unscoped
-          @model_class.where nil
+          @model_class.where nil # rubocop:disable CodeReuse/ActiveRecord
         end
 
         # Search text for the text columns (see {}) in `index_field_names`

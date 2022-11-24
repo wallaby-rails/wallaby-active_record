@@ -29,7 +29,7 @@ module Wallaby
           # @param klass [Class]
           # @return [Array<Class>]
           def sti_list(klass)
-            (klass.descendants << klass).sort_by(&:name)
+            (klass.descendants << klass).sort_by(&:name).uniq
           end
 
           # Find out which parent is the one that can give us the STI list.

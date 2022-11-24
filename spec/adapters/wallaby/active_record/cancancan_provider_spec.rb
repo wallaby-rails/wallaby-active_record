@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::CancancanProvider do
@@ -20,7 +21,7 @@ describe Wallaby::ActiveRecord::CancancanProvider do
   end
 
   describe 'instance methods' do
-    subject { described_class.new context, options }
+    subject { described_class.new options }
 
     let(:target) { Product.new }
     let(:target_class) { Product }

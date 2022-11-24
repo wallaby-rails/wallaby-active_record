@@ -9,6 +9,7 @@ module Wallaby
         # with non-{Wallaby::ActiveRecord::ModelServiceProvider::Querier::Transformer} result
         class Wrapper
           attr_reader :list
+
           delegate :push, to: :list
           delegate :each, to: :list
           delegate :last, to: :list

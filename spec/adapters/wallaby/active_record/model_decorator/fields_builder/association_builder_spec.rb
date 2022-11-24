@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::AssociationBuilder do
@@ -7,7 +8,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::AssociationBuilde
     let(:model_class) do
       Class.new(ActiveRecord::Base) do
         self.table_name = 'products'
-        def self.name; 'Product'; end
+        def self.name
+          'Product'
+        end
       end
     end
 
@@ -44,7 +47,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::AssociationBuilde
         let(:model_class) do
           Class.new(ActiveRecord::Base) do
             self.table_name = 'order_items'
-            def self.name; 'Order::Item'; end
+            def self.name
+              'Order::Item'
+            end
           end
         end
 
@@ -70,7 +75,9 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder::AssociationBuilde
         let(:model_class) do
           Class.new(ActiveRecord::Base) do
             self.table_name = 'order_items'
-            def self.name; 'Order::Item'; end
+            def self.name
+              'Order::Item'
+            end
           end
         end
 

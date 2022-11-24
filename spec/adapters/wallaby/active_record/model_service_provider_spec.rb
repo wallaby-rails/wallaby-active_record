@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelServiceProvider do
@@ -7,7 +8,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
     let(:model_class) { AllPostgresType }
     let(:model_decorator) { Wallaby::ActiveRecord::ModelDecorator.new model_class }
     let(:ability) { Ability.new nil }
-    let(:authorizer) { Wallaby::ModelAuthorizer.new model_class, instance_double('context'), provider_name: :cancancan, ability: ability }
+    let(:authorizer) { Wallaby::ModelAuthorizer.new model_class, provider_name: :cancancan, options: { ability: ability } }
 
     describe '#permit' do
       it 'returns the permitted params' do
@@ -119,7 +120,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
           resource = subject.create resource, parameters!(something: 'else'), authorizer
           expect(resource).to be_a model_class
           expect(resource.id).to be_blank
-          expect(resource.errors[:base]).to include "unknown attribute 'something' for AllPostgresType."
+          expect(resource.errors[:base]).to include a_string_including("unknown attribute 'something' for AllPostgresType")
         end
       end
     end

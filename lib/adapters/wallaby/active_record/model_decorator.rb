@@ -5,16 +5,16 @@ module Wallaby
     # Modal decorator for {Wallaby::ActiveRecord}
     class ModelDecorator < ::Wallaby::ModelDecorator
       # Data types to exclude for {#index_field_names}
-      INDEX_EXCLUSIVE_DATA_TYPES = %w(
+      INDEX_EXCLUSIVE_DATA_TYPES = %w[
         binary citext hstore json jsonb tsvector xml
         blob mediumblob longblob text mediumtext longtext
-      ).freeze
+      ].freeze
 
       # Classes to exclude for {#show_field_names}
-      SHOW_EXCLUSIVE_CLASS_NAMES = %w(ActiveStorage::Attachment ActiveStorage::Blob).freeze
+      SHOW_EXCLUSIVE_CLASS_NAMES = %w[ActiveStorage::Attachment ActiveStorage::Blob].freeze
 
       # Fields to exclude for {#form_field_names}
-      FORM_EXCLUSIVE_DATA_TYPES = %w(created_at updated_at).freeze
+      FORM_EXCLUSIVE_DATA_TYPES = %w[created_at updated_at].freeze
 
       # Original metadata information of the primative and association fields
       # pulling out from the ActiveRecord model.

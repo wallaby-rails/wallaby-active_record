@@ -12,21 +12,29 @@ gemspec path: '../'
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
-gem 'rails', '~> 5.2.2'
-# gem 'wallaby-core', git: 'https://github.com/wallaby-rails/wallaby-core.git', branch: 'master'
+gem 'rails', '~> 5.2.0'
+gem 'wallaby-core', git: 'https://github.com/wallaby-rails/wallaby-core.git', branch: 'develop'
+gem 'wallaby-cop', git: 'https://github.com/wallaby-rails/wallaby-cop.git', branch: 'main'
 
 gem 'cancancan'
 gem 'devise'
 gem 'mysql2'
 gem 'pg'
 gem 'pundit'
-gem 'sqlite3', '< 1.4.0'
+gem 'sqlite3'
+
+# @see https://stackoverflow.com/a/71192990
+gem 'psych', '< 4'
+
+# @see https://stackoverflow.com/a/70500221
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
 
 group :test do
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'simplecov', '~> 0.17.0'
-  gem 'wallaby-cop', git: 'https://github.com/wallaby-rails/wallaby-cop.git', branch: 'master'
+  gem 'simplecov'
   gem 'webmock'
 end

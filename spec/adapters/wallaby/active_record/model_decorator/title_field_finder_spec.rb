@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelDecorator::TitleFieldFinder do
@@ -28,10 +29,10 @@ describe Wallaby::ActiveRecord::ModelDecorator::TitleFieldFinder do
     context 'when the model has string columns' do
       let(:fields) do
         {
-          'id'    => { name: 'id',     type: 'integer', label: 'ID' },
-          'uuid'  => { name: 'uuid',   type: 'string',  label: 'UUID' },
-          'name'  => { name: 'name',   type: 'string',  label: 'Name' },
-          'title' => { name: 'title',  type: 'string',  label: 'Title' }
+          'id' => { name: 'id', type: 'integer', label: 'ID' },
+          'uuid' => { name: 'uuid',   type: 'string',  label: 'UUID' },
+          'name' => { name: 'name',   type: 'string',  label: 'Name' },
+          'title' => { name: 'title', type: 'string', label: 'Title' }
         }
       end
 
