@@ -13,7 +13,7 @@ gemspec path: '../'
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 gem 'rails', '~> 6.1.0'
-gem 'wallaby-core', git: 'https://github.com/wallaby-rails/wallaby-core.git', branch: 'develop'
+gem 'wallaby-core', git: 'https://github.com/wallaby-rails/wallaby-core.git', branch: ENV['GITHUB_BASE_REF']
 gem 'wallaby-cop', git: 'https://github.com/wallaby-rails/wallaby-cop.git', branch: 'main'
 
 gem 'cancancan'
