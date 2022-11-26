@@ -60,10 +60,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Env
-        run: |
-          env
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
