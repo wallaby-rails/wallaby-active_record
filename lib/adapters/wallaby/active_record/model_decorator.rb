@@ -48,9 +48,9 @@ module Wallaby
           hash.merge! general_fields
           hash.merge! association_fields
           hash.except!(*foreign_keys_from_associations)
+        rescue ::ActiveRecord::NoDatabaseError
+          hash.default = {}
         end.freeze
-      rescue ::ActiveRecord::NoDatabaseError
-        Hash.new({}).with_indifferent_access
       end
 
       # A copy of {#fields} for index page

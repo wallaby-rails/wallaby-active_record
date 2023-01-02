@@ -20,7 +20,7 @@ module Wallaby
 
       # @return [Integer] page size from parameters or Wallaby configuration
       def page_size
-        @params[:per]
+        @params[:per].to_i
       end
 
       # @return [Integer] page number from parameters starting from 1

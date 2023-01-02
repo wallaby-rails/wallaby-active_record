@@ -14,9 +14,9 @@ module Wallaby
         def simple_field_names
           field_names =
             non_range_fields.keys +
-            belongs_to_fields.map do |_, metadata|
+            belongs_to_fields.flat_map do |_, metadata|
               [metadata[:foreign_key], metadata[:polymorphic_type]]
-            end.flatten.compact
+            end.compact
           fields = [@model_decorator.primary_key, 'created_at', 'updated_at']
           field_names.reject { |field_name| fields.include? field_name }
         end
