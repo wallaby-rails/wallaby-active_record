@@ -49,6 +49,7 @@ module Wallaby
           hash.merge! association_fields
           hash.except!(*foreign_keys_from_associations)
         rescue ::ActiveRecord::NoDatabaseError
+          hash.default = {}
         end.freeze
       end
 
