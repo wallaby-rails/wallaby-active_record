@@ -23,7 +23,8 @@ db_namespace = namespace :db do
     end
 
     desc "Recreate the test database from an existent schema.rb file"
-    task load: %w[db:test:load_schema]
+    task load: %w[db:test:load_schema] do # rubocop:disable Lint/EmptyBlock
+    end
   end
 
   namespace :test do
