@@ -45,9 +45,8 @@ module Wallaby
         @fields ||= ::ActiveSupport::HashWithIndifferentAccess.new.tap do |hash|
           next hash.default = {} unless @model_class.table_exists?
 
-          hash.merge! general_fields
-          hash.merge! association_fields
-          hash.except!(*foreign_keys_from_associations)
+          hash.merge!(association_fields)
+          hash.merge!(general_fields)
         rescue ::ActiveRecord::NoDatabaseError
           hash.default = {}
         end.freeze
@@ -56,35 +55,39 @@ module Wallaby
       # A copy of {#fields} for index page
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def index_fields
-        @index_fields ||= Utils.clone fields
+        @index_fields ||= Utils.clone(fields)
       end
 
       # A copy of {#fields} for show page
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def show_fields
-        @show_fields ||= Utils.clone fields
+        @show_fields ||= Utils.clone(fields)
       end
 
       # A copy of {#fields} for form (new/edit) page
       # @return [ActiveSupport::HashWithIndifferentAccess] metadata
       def form_fields
-        @form_fields ||= Utils.clone fields
+        @form_fields ||= Utils.clone(fields)
       end
 
       # @return [Array<String>] a list of field names for index page (note: only primitive SQL types are included).
       def index_field_names
         @index_field_names ||=
-          index_fields.reject do |_field_name, metadata|
-            metadata[:is_association] \
-              || INDEX_EXCLUSIVE_DATA_TYPES.include?(metadata[:type])
-          end.keys
+          reposition(
+            index_fields.reject do |_field_name, metadata|
+              metadata[:hidden] || # e.g. foreign keys, polymorphic columns
+                metadata[:is_association] || # associations
+                INDEX_EXCLUSIVE_DATA_TYPES.include?(metadata[:type]) # not the types for index page
+            end.keys
+          )
       end
 
       # @return [Array<String>] a list of field names for show page (note: **ActiveStorage** fields are excluded).
       def show_field_names
         @show_field_names ||=
           show_fields.reject do |_field_name, metadata|
-            SHOW_EXCLUSIVE_CLASS_NAMES.include? metadata[:class].try(:name)
+            metadata[:hidden] || # e.g. foreign keys, polymorphic columns
+              SHOW_EXCLUSIVE_CLASS_NAMES.include?(metadata[:class].try(:name)) # not the types for show page
           end.keys
       end
 
@@ -93,9 +96,11 @@ module Wallaby
       def form_field_names
         @form_field_names ||=
           form_fields.reject do |field_name, metadata|
-            field_name == primary_key \
-              || FORM_EXCLUSIVE_DATA_TYPES.include?(field_name) \
-              || metadata[:has_scope] || metadata[:is_through]
+            field_name == primary_key || # primary key
+              metadata[:has_scope] || # not a regular association
+              metadata[:is_through] || # not direct association
+              metadata[:hidden] || # e.g. foreign keys, polymorphic columns
+              FORM_EXCLUSIVE_DATA_TYPES.include?(field_name) # not the types for form page
           end.keys
       end
 
@@ -117,20 +122,19 @@ module Wallaby
       # @param resource [Object]
       # @return [String] the title of given resource
       def guess_title(resource)
-        resource.try title_field_finder.find
+        resource.try(title_field_finder.find)
       end
 
       protected
 
       # @return [Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder]
       def field_builder
-        @field_builder ||= FieldsBuilder.new @model_class
+        @field_builder ||= FieldsBuilder.new(@model_class)
       end
 
       # @return [Wallaby::ActiveRecord::ModelDecorator::TitleFieldFinder]
       def title_field_finder
-        @title_field_finder ||=
-          TitleFieldFinder.new @model_class, general_fields
+        @title_field_finder ||= TitleFieldFinder.new(@model_class, general_fields)
       end
 
       # @!method general_fields
@@ -141,17 +145,6 @@ module Wallaby
       #   (see Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder#association_fields)
       #   @see Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder#association_fields
       delegate :general_fields, :association_fields, to: :field_builder
-
-      # Find out all the foreign keys for association fields
-      # @param fields [Hash] metadata of fields
-      # @return [Array<String>] a list of foreign keys
-      def foreign_keys_from_associations(fields = association_fields)
-        fields.each_with_object([]) do |(_field_name, metadata), keys|
-          keys << metadata[:foreign_key] if metadata[:foreign_key]
-          keys << metadata[:polymorphic_type] if metadata[:polymorphic_type]
-          keys
-        end
-      end
     end
   end
 end

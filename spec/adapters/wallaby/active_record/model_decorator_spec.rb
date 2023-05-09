@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Wallaby::ActiveRecord::ModelDecorator do
@@ -233,12 +234,6 @@ describe Wallaby::ActiveRecord::ModelDecorator do
         expect(subject.form_field_names).to match_array %w[sku name description stock price featured available_to_date available_to_time published_at product_detail order_items category tags]
       end
     end
-
-    describe '#foreign_keys_from_associations' do
-      it 'returns foreign keys for associations' do
-        expect(subject.send(:foreign_keys_from_associations)).to match_array %w[product_detail_id picture_id order_item_ids order_ids category_id tag_ids]
-      end
-    end
   end
 
   describe 'Polymorphic fields' do
@@ -262,6 +257,8 @@ describe Wallaby::ActiveRecord::ModelDecorator do
           'updated_at' => {
             'type' => 'datetime', 'label' => 'Updated at'
           },
+          "imageable_id" => { "hidden" => true, "is_foreign_key" => true, "label" => "Imageable", "type" => "integer" },
+          "imageable_type" => { "hidden" => true, "is_polymorphic_type" => true, "label" => "Imageable type", "type" => "string" },
           'imageable' => {
             'type' => 'belongs_to', 'label' => 'Imageable', 'is_association' => true, 'sort_disabled' => true, 'is_polymorphic' => true, 'is_through' => false, 'has_scope' => false, 'foreign_key' => 'imageable_id', 'polymorphic_type' => 'imageable_type', 'polymorphic_list' => [Product]
           }
@@ -278,12 +275,6 @@ describe Wallaby::ActiveRecord::ModelDecorator do
     describe '#form_field_names' do
       it 'excludes id, created_at, updated_at, has_scope and is_through fields' do
         expect(subject.form_field_names).to match_array %w[name file imageable]
-      end
-    end
-
-    describe '#foreign_keys_from_associations' do
-      it 'returns ploymorphic foreign keys for associations' do
-        expect(subject.send(:foreign_keys_from_associations)).to match_array %w[imageable_id imageable_type]
       end
     end
   end

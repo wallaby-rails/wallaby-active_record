@@ -7,7 +7,7 @@ module Wallaby
       # @param params [ActionController::Parameters]
       # @param action [String, Symbol]
       # @param authorizer
-      # @return [ActionController::Parameters] whitelisted parameters
+      # @return [ActionController::Parameters] allowlisted parameters
       def permit(params, action, authorizer)
         authorized_fields = authorizer.permit_params action, @model_class
         params.require(param_key).permit(authorized_fields || permitted_fields)
@@ -121,7 +121,7 @@ module Wallaby
         @model_class.model_name.param_key
       end
 
-      # @return [Array] the list of attributes to whitelist for mass assignment
+      # @return [Array] the list of attributes to allowlist for mass assignment
       def permitted_fields
         @permitted_fields ||=
           permitter.simple_field_names << permitter.compound_hashed_fields
