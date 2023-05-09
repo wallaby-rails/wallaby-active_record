@@ -20,7 +20,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: dummy_test
+          POSTGRES_DB: wallaby_active_record_dummy_test
           POSTGRES_USER: ${{ env.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
         ports:
@@ -33,7 +33,7 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_DATABASE: dummy_test
+          MYSQL_DATABASE: wallaby_active_record_dummy_test
           MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
         ports:
           - 3306:3306
