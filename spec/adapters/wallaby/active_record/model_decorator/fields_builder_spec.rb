@@ -117,6 +117,8 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder do
       context 'when for has_many' do
         it 'returns association_fields' do
           model_class.has_many :items, class_name: 'Order::Item'
+          model_class.has_many :order_items, class_name: 'Order::Item'
+
           expect(subject.association_fields['items']).to eq(
             type: 'has_many',
             label: 'Items',
@@ -128,7 +130,6 @@ describe Wallaby::ActiveRecord::ModelDecorator::FieldsBuilder do
             class: Order::Item
           )
 
-          model_class.has_many :order_items, class_name: 'Order::Item'
           expect(subject.association_fields['order_items']).to eq(
             type: 'has_many',
             label: 'Order items',

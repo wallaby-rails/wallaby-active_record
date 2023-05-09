@@ -18,7 +18,7 @@ module Wallaby
               [metadata[:foreign_key], metadata[:polymorphic_type]]
             end.compact
           fields = [@model_decorator.primary_key, 'created_at', 'updated_at']
-          field_names.reject { |field_name| fields.include? field_name }
+          field_names.reject { |field_name| fields.include?(field_name) }.uniq
         end
 
         # @return [Array<String>] a list of field names of range and association

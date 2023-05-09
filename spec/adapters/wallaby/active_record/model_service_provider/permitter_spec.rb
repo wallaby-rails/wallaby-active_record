@@ -93,13 +93,13 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Permitter do
 
     describe '#non_association_fields' do
       it 'returns non-association fields' do
-        expect(subject.send(:non_association_fields).keys).to match_array %w[id sku name description stock price featured available_to_date available_to_time published_at]
+        expect(subject.send(:non_association_fields).keys).to match_array %w[id sku name category_id description stock price featured available_to_date available_to_time published_at]
       end
     end
 
     describe '#non_range_fields' do
       it 'returns non-range fields' do
-        expect(subject.send(:non_range_fields).keys).to match_array %w[id sku name description stock price featured available_to_date available_to_time published_at]
+        expect(subject.send(:non_range_fields).keys).to match_array %w[id sku name category_id description stock price featured available_to_date available_to_time published_at]
       end
     end
 

@@ -12,28 +12,31 @@ module Wallaby
 
         # @return [Hash<String, Hash>] a hash for general fields
         def general_fields
-          @model_class.columns.each_with_object({}) do |column, fields|
-            metadata = {
-              type: to_type(column).freeze,
-              label: @model_class.human_attribute_name(column.name)
-            }
-            sti_builder.update(metadata, column)
-            fields[column.name] = metadata
-          end
+          @general_fields ||=
+            @model_class.columns.each_with_object({}) do |column, fields|
+              metadata = {
+                type: to_type(column).freeze,
+                label: @model_class.human_attribute_name(column.name)
+              }
+              sti_builder.update(metadata, column)
+              fields[column.name] = metadata
+            end
         end
 
         # @return [Hash<String, Hash>] a hash for association fields
         #   (e.g. belongs_to / has_one / has_many / has_and_belongs_to_many)
         def association_fields
-          @model_class.reflections.each_with_object({}) do |(name, ref), fields|
-            metadata = {
-              type: ref.macro.to_s,
-              label: @model_class.human_attribute_name(name)
-            }
-            association_builder.update(metadata, ref)
-            polymorphic_builder.update(metadata, ref)
-            fields[name] = metadata
-          end
+          @association_fields ||=
+            @model_class.reflections.each_with_object({}) do |(name, reflection), fields|
+              metadata = {
+                type: reflection.macro.to_s, # association type
+                label: @model_class.human_attribute_name(name)
+              }
+              association_builder.update(metadata, reflection)
+              polymorphic_builder.update(metadata, reflection)
+              update_general_fields_with(metadata)
+              fields[name] = metadata
+            end
         end
 
         protected
@@ -60,6 +63,21 @@ module Wallaby
         # @return [Wallaby::ActiveRecord::ModelDecorator::PolymorphicBuilder]
         def polymorphic_builder
           @polymorphic_builder ||= PolymorphicBuilder.new
+        end
+
+        # @param metadata [Hash] association metadata
+        def update_general_fields_with(metadata)
+          metadata[:foreign_key].try do |key|
+            general_fields[key].try do |general_metadata|
+              general_metadata[:is_foreign_key] = general_metadata[:hidden] = true
+            end
+          end
+
+          metadata[:polymorphic_type].try do |key|
+            general_fields[key].try do |general_metadata|
+              general_metadata[:is_polymorphic_type] = general_metadata[:hidden] = true
+            end
+          end
         end
       end
     end
