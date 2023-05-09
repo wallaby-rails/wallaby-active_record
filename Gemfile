@@ -2,13 +2,13 @@
 
 source 'https://rubygems.org'
 
-ruby '2.7.6'
+ruby '3.1.2'
 
 # Specify your gem's dependencies in wallaby-active_record.gemspec
 gemspec
 
-gem 'rails'
-# gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 7.0.0'
+gem 'sassc'
 
 gem 'mysql2'
 gem 'pg'

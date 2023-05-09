@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'active_record'
 
 # override database.rake
@@ -22,8 +23,7 @@ db_namespace = namespace :db do
     end
 
     desc "Recreate the test database from an existent schema.rb file"
-    task load: %w[db:test:load_schema] do
-    end
+    task load: %w[db:test:load_schema]
   end
 
   namespace :test do
@@ -39,7 +39,7 @@ db_namespace = namespace :db do
         should_reconnect = ActiveRecord::Base.connection_pool.active_connection?
         ActiveRecord::Schema.verbose = false
         schema_file = File.join ActiveRecord::Tasks::DatabaseTasks.db_dir, "#{type}_schema.rb"
-        if Rails::VERSION::MAJOR == 6 && Rails::VERSION::MINOR >= 1 || Rails::VERSION::MAJOR >= 7
+        if (Rails::VERSION::MAJOR == 6 && Rails::VERSION::MINOR >= 1) || Rails::VERSION::MAJOR >= 7
           ActiveRecord::Tasks::DatabaseTasks.load_schema ActiveRecord::Base.configurations.configs_for(env_name: type).first, :ruby, schema_file
         elsif Rails::VERSION::MAJOR >= 5 && Rails::VERSION::MAJOR <= 6
           ActiveRecord::Tasks::DatabaseTasks.load_schema ActiveRecord::Base.configurations[type], :ruby, schema_file

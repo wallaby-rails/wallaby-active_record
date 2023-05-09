@@ -74,7 +74,7 @@ module Wallaby
       def index_field_names
         @index_field_names ||=
           reposition(
-            index_fields.reject do |field_name, metadata|
+            index_fields.reject do |_field_name, metadata|
               metadata[:hidden] || # e.g. foreign keys, polymorphic columns
                 metadata[:is_association] || # associations
                 INDEX_EXCLUSIVE_DATA_TYPES.include?(metadata[:type]) # not the types for index page

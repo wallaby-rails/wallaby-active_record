@@ -14,7 +14,8 @@ module Wallaby
         def normalize(params)
           params.each do |field_name, values|
             metadata =
-              @model_decorator.metadata_of(field_name).presence || @model_decorator.form_metadata_of(field_name)
+              @model_decorator.metadata_of(field_name).presence ||
+              @model_decorator.form_metadata_of(field_name)
             type = metadata[:type].try(:[], /range|point|binary/)
             next unless type
 
@@ -29,7 +30,7 @@ module Wallaby
         # @param values [Array]
         def normalize_range_values(params, field_name, values)
           normalized = Array(values).map(&:presence).compact
-          params[field_name] = (normalized.present? && values.length == 2) && (values.first...values.last) || nil
+          params[field_name] = ((normalized.present? && values.length == 2) && (values.first...values.last)) || nil
         end
 
         # Turn values into points
@@ -38,7 +39,7 @@ module Wallaby
         # @param values [Array]
         def normalize_point_values(params, field_name, values)
           normalized = Array(values).map(&:presence).compact
-          params[field_name] = normalized.present? && values.map(&:to_f) || nil
+          params[field_name] = (normalized.present? && values.map(&:to_f)) || nil
         end
 
         # Turn values into binary
@@ -46,7 +47,7 @@ module Wallaby
         # @param field_name [String]
         # @param values [Object]
         def normalize_binary_values(params, field_name, values)
-          params[field_name] = values.is_a?(::ActionDispatch::Http::UploadedFile) && values.read || nil
+          params[field_name] = (values.is_a?(::ActionDispatch::Http::UploadedFile) && values.read) || nil
         end
       end
     end
