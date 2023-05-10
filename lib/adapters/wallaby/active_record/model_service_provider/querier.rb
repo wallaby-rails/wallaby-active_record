@@ -19,11 +19,33 @@ module Wallaby
         # @param params [ActionController::Parameters]
         # @return [ActiveRecord::Relation]
         def search(params)
-          filter_name, keywords, field_queries = extract params
-          scope = filtered_by filter_name
-          query = text_search keywords
-          query = field_search field_queries, query
-          scope.where query # rubocop:disable CodeReuse/ActiveRecord
+          filter_name, keywords, field_queries = extract(params)
+          scope = filtered_by(filter_name)
+          scope = preload_associations_for(scope)
+          arel_query = text_search(keywords)
+          arel_query = field_search(field_queries, arel_query)
+          scope.where(arel_query) # rubocop:disable CodeReuse/ActiveRecord
+        end
+
+        # Extract the sorting from parameters `sort`,
+        # and combine with metadata option `:nulls`
+        # to execute order for the given scope.
+        # @param sort_string [String]
+        # @param scope [ActiveRecord::Relation]
+        # @return [ActiveRecord::Relation]
+        def sort(sort_string, scope)
+          return scope if sort_string.blank?
+
+          sort_hash = Sorting::HashBuilder.build(sort_string)
+          sorting = Sorting::HashBuilder.to_str(sort_hash) do |field_name|
+            case nulls_order = @model_decorator.index_fields.dig(field_name, :nulls)
+            when :first, :last
+              " nulls #{nulls_order}"
+            else
+              ""
+            end
+          end
+          scope.order(Arel.sql(sorting)) # rubocop:disable CodeReuse/ActiveRecord
         end
 
         protected
@@ -77,12 +99,25 @@ module Wallaby
           @model_class.where nil # rubocop:disable CodeReuse/ActiveRecord
         end
 
-        # Search text for the text columns (see {}) in `index_field_names`
+        # Preload association for the scope
+        # @param scope [ActiveRecord::Relation]
+        # @return [ActiveRecord::Relation]
+        def preload_associations_for(scope)
+          index_associations = index_field_names.select do |field_name|
+            @model_decorator.fields.dig(field_name, :is_association)
+          end
+
+          return scope if index_associations.blank?
+
+          scope.preload(*index_associations) # rubocop:disable CodeReuse/ActiveRecord
+        end
+
+        # Search text for the text columns (see {}) in {#index_field_names}
         # @param keywords [String] keywords
-        # @param query [ActiveRecord::Relation, nil]
-        # @return [ActiveRecord::Relation, nil]
-        def text_search(keywords, query = nil)
-          return query unless keywords_check? keywords
+        # @param arel_query [Arel::Nodes::Node, nil]
+        # @return [Arel::Nodes::Node, nil]
+        def text_search(keywords, arel_query = nil)
+          return arel_query unless keywords_check?(keywords)
 
           text_fields.each do |field_name|
             sub_query = nil
@@ -90,34 +125,31 @@ module Wallaby
               exp = table[field_name].matches(Escaper.execute(keyword))
               sub_query = sub_query.try(:and, exp) || exp
             end
-            query = query.try(:or, sub_query) || sub_query
+            arel_query = arel_query.try(:or, sub_query) || sub_query
           end
-          query
+          arel_query
         end
 
         # Perform SQL query for the colon query (e.g. data:<2000-01-01)
         # @param field_queries [Array]
-        # @param query [ActiveRecord::Relation]
-        # @return [ActiveRecord::Relation]
-        def field_search(field_queries, query)
-          return query unless field_check? field_queries
+        # @param arel_query [Arel::Nodes::Node]
+        # @return [Arel::Nodes::Node]
+        def field_search(field_queries, arel_query)
+          return arel_query unless field_check?(field_queries)
 
           field_queries.each do |exps|
-            sub_queries = build_sub_queries_with exps
-            query = query.try(:and, sub_queries) || sub_queries
+            sub_queries = build_sub_queries_with(exps)
+            arel_query = arel_query.try(:and, sub_queries) || sub_queries
           end
-          query
+          arel_query
         end
 
-        # @return [Array<String>] a list of text fields from `index_field_names`
+        # @return [Array<String>] a list of text fields from {#index_field_names}
         def text_fields
-          @text_fields ||= begin
-            index_field_names = @model_decorator.index_field_names.map(&:to_s)
-            @model_decorator.fields.select do |field_name, metadata|
-              index_field_names.include?(field_name) &&
-                TEXT_FIELDS.include?(metadata[:type].to_s)
-            end.keys
-          end
+          @text_fields ||= @model_decorator.fields.select do |field_name, metadata|
+            index_field_names.include?(field_name) &&
+              TEXT_FIELDS.include?(metadata[:type].to_s)
+          end.keys
         end
 
         # @param keywords [Array<String>] a list of keywords
@@ -154,6 +186,11 @@ module Wallaby
             query = query.try(exp[:join], sub) || sub
           end
           query
+        end
+
+        # @return [Array<String>]
+        def index_field_names
+          @index_field_names ||= @model_decorator.index_field_names.map(&:to_s)
         end
       end
     end
