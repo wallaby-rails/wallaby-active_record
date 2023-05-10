@@ -9,7 +9,7 @@ module Wallaby
       # @param authorizer
       # @return [ActionController::Parameters] allowlisted parameters
       def permit(params, action, authorizer)
-        authorized_fields = authorizer.permit_params action, @model_class
+        authorized_fields = authorizer.permit_params(action, @model_class)
         params.require(param_key).permit(authorized_fields || permitted_fields)
       end
 
@@ -18,9 +18,9 @@ module Wallaby
       # @param authorizer [Ability] for now
       # @return [ActiveRecord::Relation] relation
       def collection(params, authorizer)
-        query = querier.search params
-        query = query.order params[:sort] if params[:sort].present? # rubocop:disable CodeReuse/ActiveRecord
-        authorizer.accessible_for :index, query
+        query = querier.search(params)
+        query = querier.sort(params[:sort], query)
+        authorizer.accessible_for(:index, query)
       end
 
       # @param query [ActiveRecord::Relation]
@@ -44,7 +44,7 @@ module Wallaby
       # @return [Object] persisted resource object
       # @raise [Wallaby::ResourceNotFound] when record is not found
       def find(id, _params, _authorizer)
-        @model_class.find id
+        @model_class.find(id)
       rescue ::ActiveRecord::RecordNotFound
         raise ResourceNotFound, id
       end
@@ -54,7 +54,7 @@ module Wallaby
       # @param params [ActionController::Parameters]
       # @param authorizer [Wallaby::ModelAuthorizer]
       def create(resource, params, authorizer)
-        save __callee__, resource, params, authorizer
+        save(__callee__, resource, params, authorizer)
       end
 
       # Assign resource with new values and store it in database as an update.
@@ -62,7 +62,7 @@ module Wallaby
       # @param params [ActionController::Parameters]
       # @param authorizer [Wallaby::ModelAuthorizer]
       def update(resource, params, authorizer)
-        save __callee__, resource, params, authorizer
+        save(__callee__, resource, params, authorizer)
       end
 
       # Remove a record from database
@@ -81,19 +81,19 @@ module Wallaby
       # @return resource itself
       # @raise [ActiveRecord::StatementInvalid, ActiveModel::UnknownAttributeError, ActiveRecord::UnknownAttributeError]
       def save(action, resource, params, authorizer)
-        resource.assign_attributes normalize params
-        ensure_attributes_for authorizer, action, resource
-        resource.save if valid? resource
+        resource.assign_attributes(normalize(params))
+        ensure_attributes_for(authorizer, action, resource)
+        resource.save if valid?(resource)
         resource
       rescue ::ActiveRecord::ActiveRecordError, ActiveModel::ForbiddenAttributesError, unknown_attribute_error => e
-        resource.errors.add :base, e.message
+        resource.errors.add(:base, e.message)
         resource
       end
 
       # Normalize params
       # @param params [ActionController::Parameters]
       def normalize(params)
-        normalizer.normalize params
+        normalizer.normalize(params)
       end
 
       # See if a resource is valid
@@ -101,7 +101,7 @@ module Wallaby
       # @return [true] if valid
       # @return [false] otherwise
       def valid?(resource)
-        validator.valid? resource
+        validator.valid?(resource)
       end
 
       # To make sure that the record can be updated with the values that are
@@ -112,8 +112,8 @@ module Wallaby
       def ensure_attributes_for(authorizer, action, resource)
         return if authorizer.blank?
 
-        restricted_conditions = authorizer.attributes_for action, resource
-        resource.assign_attributes restricted_conditions
+        restricted_conditions = authorizer.attributes_for(action, resource)
+        resource.assign_attributes(restricted_conditions)
       end
 
       # @return [String] param key
@@ -129,22 +129,22 @@ module Wallaby
 
       # @return [Wallaby::ActiveRecord::ModelServiceProvider::Permitter]
       def permitter
-        @permitter ||= Permitter.new @model_decorator
+        @permitter ||= Permitter.new(@model_decorator)
       end
 
       # @return [Wallaby::ActiveRecord::ModelServiceProvider::Querier]
       def querier
-        @querier ||= Querier.new @model_decorator
+        @querier ||= Querier.new(@model_decorator)
       end
 
       # @return [Wallaby::ActiveRecord::ModelServiceProvider::Normalizer]
       def normalizer
-        @normalizer ||= Normalizer.new @model_decorator
+        @normalizer ||= Normalizer.new(@model_decorator)
       end
 
       # @return [Wallaby::ActiveRecord::ModelServiceProvider::Validator]
       def validator
-        @validator ||= Validator.new @model_decorator
+        @validator ||= Validator.new(@model_decorator)
       end
 
       # @return [Class] ActiveModel::UnknownAttributeError if Rails 4

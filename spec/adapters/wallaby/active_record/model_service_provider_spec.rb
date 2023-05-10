@@ -34,6 +34,15 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
         expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match order
       end
 
+      context 'with nulls option' do
+        it 'orders the collection' do
+          model_decorator.index_fields[:integer][:nulls] = :last
+          order = 'integer desc,boolean asc'
+          order_with_nulls = 'integer desc nulls last,boolean asc'
+          expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match order_with_nulls
+        end
+      end
+
       it 'filters the collection' do
         model_decorator.filters[:bingo] = { scope: -> { where integer: 888 } }
         expect(subject.collection(parameters(filter: 'bingo'), authorizer).to_sql).to eq 'SELECT "all_postgres_types".* FROM "all_postgres_types" WHERE "all_postgres_types"."integer" = 888'
@@ -45,6 +54,25 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
           ability.cannot :manage, model_class, condition
           record = model_class.create!(condition)
           expect(subject.collection(parameters, authorizer)).not_to include record
+        end
+      end
+
+      context 'with product' do
+        let(:model_class) { Product }
+
+        it 'returns the collection and its associations without N+1' do
+          category1 = Category.create!(name: 'Food')
+          category2 = Category.create!(name: 'IT')
+          product1 = model_class.create!(category: category1, name: 'Egg')
+          product2 = model_class.create!(category: category1, name: 'Fruit')
+          product3 = model_class.create!(category: category2, name: 'Computer')
+          model_decorator.index_field_names << 'category'
+
+          recorder = ActiveRecord::QueryRecorder.new do
+            expect(subject.collection(parameters, authorizer)).to contain_exactly product1, product2, product3
+          end
+
+          expect(recorder.count).to eq 2
         end
       end
     end
