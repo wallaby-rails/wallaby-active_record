@@ -34,16 +34,3 @@ And re-bundle.
 ```shell
 bundle install
 ```
-
-## Documentation
-
-- [API Reference](https://www.rubydoc.info/gems/wallaby-active_record)
-- [Change Logs](https://github.com/wallaby-rails/wallaby-active_record/blob/master/CHANGELOG.md)
-
-## Want to contribute?
-
-Raise an [issue](https://github.com/wallaby-rails/wallaby-active_record/issues/new), discuss and resolve!
-
-## License
-
-This project uses [MIT License](https://github.com/wallaby-rails/wallaby-active_record/blob/master/LICENSE).
