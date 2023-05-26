@@ -121,7 +121,7 @@ describe Wallaby::ActiveRecord::ModelServiceProvider::Normalizer do
 
     describe 'binary types' do
       it 'reads the uploaded file' do
-        file = ActionDispatch::Http::UploadedFile.new tempfile: 'a_file', filename: 'file_name', type: 'jpg', head: {}
+        file = ActionDispatch::Http::UploadedFile.new tempfile: 'a_file', filename: 'file_name', type: 'jpg', head: ''
         expect(file).to receive(:read).and_return('file_content')
         expect(subject.normalize(parameters(binary: file))[:binary]).to eq 'file_content'
       end

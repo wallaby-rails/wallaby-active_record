@@ -36,15 +36,8 @@ module Wallaby
         def sort(sort_string, scope)
           return scope if sort_string.blank?
 
-          sort_hash = Sorting::HashBuilder.build(sort_string)
-          sorting = Sorting::HashBuilder.to_str(sort_hash) do |field_name|
-            case nulls_order = @model_decorator.index_fields.dig(field_name, :nulls)
-            when :first, :last
-              " nulls #{nulls_order}"
-            else
-              ""
-            end
-          end
+          sort_hash = normalize_sort(Sorting::HashBuilder.build(sort_string))
+          sorting = Sorting::HashBuilder.to_str(sort_hash)
           scope.order(Arel.sql(sorting)) # rubocop:disable CodeReuse/ActiveRecord
         end
 
@@ -186,6 +179,25 @@ module Wallaby
             query = query.try(exp[:join], sub) || sub
           end
           query
+        end
+
+        def normalize_sort(hash)
+          sanitized =
+            hash.reject do |name, _sort|
+              @model_decorator.fields[name].blank? || # not a column or association?
+                @model_decorator.index_fields[name][:sort_disabled] || # sort disabled?
+                @model_decorator.index_field_names.exclude?(name) # not included?
+            end
+          sanitized.each_with_object({}) do |(field_name, value), normalized|
+            column_name = "#{@model_class.table_name}.#{field_name}"
+            normalized[column_name] =
+              case nulls_order = @model_decorator.index_fields.dig(field_name, :nulls)
+              when :first, :last, 'first', 'last'
+                "#{value} nulls #{nulls_order}"
+              else
+                value
+              end.upcase
+          end
         end
 
         # @return [Array<String>]
