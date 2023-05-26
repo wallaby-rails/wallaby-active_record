@@ -29,17 +29,39 @@ describe Wallaby::ActiveRecord::ModelServiceProvider do
         expect(subject.collection(parameters, authorizer)).to contain_exactly record
       end
 
-      it 'orders the collection' do
-        order = 'integer desc,boolean asc'
-        expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match order
-      end
+      describe 'ordering' do
+        let(:model_class) { Product }
 
-      context 'with nulls option' do
         it 'orders the collection' do
-          model_decorator.index_fields[:integer][:nulls] = :last
-          order = 'integer desc,boolean asc'
-          order_with_nulls = 'integer desc nulls last,boolean asc'
-          expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match order_with_nulls
+          order = 'price desc,featured asc'
+          sql_order = 'products.price DESC,products.featured ASC'
+          expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match sql_order
+        end
+
+        context 'with nulls option' do
+          it 'orders the collection' do
+            model_decorator.index_fields[:price][:nulls] = :last
+            order = 'price desc,featured asc'
+            sql_order = 'products.price DESC NULLS LAST,products.featured ASC'
+            expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match sql_order
+          end
+        end
+
+        context 'with association column' do
+          it 'does not order the association' do
+            model_decorator.index_field_names << 'product_detail'
+            order = 'product_detail asc,price desc,featured asc'
+            sql_order = 'products.price DESC,products.featured ASC'
+            expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match sql_order
+          end
+        end
+
+        context 'with unknown column' do
+          it 'does not order the association column' do
+            order = 'unknown asc,price desc,featured asc'
+            sql_order = 'products.price DESC,products.featured ASC'
+            expect(subject.collection(parameters(sort: order), authorizer).to_sql).to match sql_order
+          end
         end
       end
 

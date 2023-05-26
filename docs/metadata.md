@@ -16,8 +16,8 @@ In this example, we change the type of field `password` to type `password` so th
 ### sort_disabled
 
 `:sort_disabled` options is to tell Wallaby to disable the sorting for the UI and backend:
-- `true` means disable sorting.
-- `false` means enable sorting.
+- `true` means to disable sorting.
+- `false` means to enable sorting.
 
 > NOTE: by default, sorting is disabled for all association fields.
 
@@ -30,8 +30,8 @@ end
 ### nulls
 
 `:nulls` options is to tell Wallaby to place the rows having `NULL` value:
-- `:first` means at the beginning
-- `:last` means at the end.
+- `:first` means to place `NULL` rows at the beginning
+- `:last` means to place `NULL` rows at the end.
 
 ```ruby
 class Admin::ProductDecorator < Admin::ApplicationDecorator
@@ -72,7 +72,7 @@ class Admin::ProductDecorator < Admin::ApplicationDecorator
   #  "is_through"=>false,
   #  "has_scope"=>false,
   #  "foreign_key"=>"category_id",
-  #  "class"=>Category(id: integer, name: string)}
+  #  "class"=>Category(id: integer, ...)}
 end
 ```
 
@@ -95,7 +95,7 @@ class Admin::ProductDecorator < Admin::ApplicationDecorator
   #  "is_through"=>false,
   #  "has_scope"=>false,
   #  "foreign_key"=>"product_detail_id",
-  #  "class"=>ProductDetail(id: integer, product_id: integer, meta_data: text)}
+  #  "class"=>ProductDetail(id: integer, ...)}
 end
 ```
 
@@ -118,7 +118,7 @@ class Admin::ProductDecorator < Admin::ApplicationDecorator
   #  "is_through"=>false,
   #  "has_scope"=>false,
   #  "foreign_key"=>"order_item_ids",
-  #  "class"=> Order::Item(id: integer, order_id: integer, product_id: integer, quantity: integer, price: float, total: float)}
+  #  "class"=> Order::Item(id: integer, ...)}
 end
 ```
 
@@ -141,7 +141,7 @@ class Admin::ProductDecorator < Admin::ApplicationDecorator
   #  "is_through"=>false,
   #  "has_scope"=>false,
   #  "foreign_key"=>"tag_ids",
-  #  "class"=>Tag(id: integer, name: string)}
+  #  "class"=>Tag(id: integer, ...)}
 end
 ```
 
@@ -179,10 +179,10 @@ class Admin::PictureDecorator < Admin::ApplicationDecorator
   #  "is_polymorphic"=>true,
   #  "polymorphic_type"=>"imageable_type",
   #  "polymorphic_list"=>
-  #   [Customer(id: integer, type: string),
-  #    Person(id: integer, type: string),
-  #    Product(id: integer, category_id: integer, sku: string, name: string, description: text, stock: integer, price: float, featured: boolean, available_to_date: date, available_to_time: time, published_at: datetime),
-  #    Staff(id: integer, type: string)]}
+  #   [Customer(id: integer, type: string, ...),
+  #    Person(id: integer, type: string, ...),
+  #    Product(id: integer, ...),
+  #    Staff(id: integer, type: string, ...)]}
 end
 ```
 
