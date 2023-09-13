@@ -111,7 +111,17 @@ module Wallaby
 
       # @return [String] primary key for the resource
       def primary_key
-        @primary_key ||= @model_class.primary_key
+        @primary_key ||=
+          @model_class.primary_key || Wallaby::Logger.warn(<<~WARNING)
+            No primary key is found and all resource pages (show/edit) will fail to build.
+
+            If the resource pages are needed, try:
+
+            - Set `self.primary_key=` in the model #{@model_class}
+            - Set `self.primary_key=` in the decorator
+
+            Otherwise, configure to disable access to new/show/edit/destroy
+          WARNING
       end
 
       # To guess the title for resource.
@@ -122,7 +132,9 @@ module Wallaby
       # @param resource [Object]
       # @return [String] the title of given resource
       def guess_title(resource)
-        resource.try(title_field_finder.find)
+        title_field_finder.find.try do |title_method|
+          resource.try(title_method)
+        end
       end
 
       protected
