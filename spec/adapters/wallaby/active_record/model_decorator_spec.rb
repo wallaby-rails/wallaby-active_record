@@ -105,9 +105,23 @@ describe Wallaby::ActiveRecord::ModelDecorator do
       context 'when model table does not exist' do
         let(:model_class) { stub_const('UnknowLand', Class.new(ActiveRecord::Base)) }
 
-        it 'renders blank hash and throw no error' do
-          expect { subject.fields }.not_to raise_error
-          expect(subject.fields).to be_blank
+        shared_examples_for 'returning empty hash' do
+          specify do
+            expect { subject.fields }.not_to raise_error
+            expect(subject.fields).to eq(ActiveSupport::HashWithIndifferentAccess.new)
+            expect(subject.fields.default).to eq({})
+            expect(subject.fields[:unknown]).to eq({})
+          end
+        end
+
+        it_behaves_like 'returning empty hash'
+
+        context 'when database does not exist' do
+          before do
+            allow(model_class).to receive(:table_exists?).and_raise(ActiveRecord::NoDatabaseError)
+          end
+
+          it_behaves_like 'returning empty hash'
         end
       end
     end
@@ -296,6 +310,15 @@ describe Wallaby::ActiveRecord::ModelDecorator do
     it 'returns model primary_key' do
       allow(model_class).to receive(:primary_key).and_return('all_postgres_type_id')
       expect(subject.primary_key).to eq 'all_postgres_type_id'
+    end
+
+    context 'when primary key is nil' do
+      it 'logs a warning message' do
+        allow(model_class).to receive(:primary_key).and_return(nil)
+        expect(Wallaby::Logger).to receive(:warn)
+
+        subject.primary_key
+      end
     end
   end
 
