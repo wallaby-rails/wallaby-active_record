@@ -28,8 +28,8 @@ Gem::Specification.new do |spec|
     'README.md'
   ]
 
-  spec.add_dependency 'activerecord', '>= 4.2.0'
-  spec.add_dependency 'wallaby-core', '0.3.0.beta1'
+  spec.add_dependency 'activerecord', '>= 6.0.0'
+  spec.add_dependency 'wallaby-core', '0.3.0.beta2'
 
   spec.add_development_dependency 'cancancan'
   spec.add_development_dependency 'pundit'

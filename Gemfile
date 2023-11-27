@@ -7,7 +7,7 @@ ruby '3.1.2'
 # Specify your gem's dependencies in wallaby-active_record.gemspec
 gemspec
 
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.1.0'
 gem 'sassc'
 
 gem 'mysql2'
