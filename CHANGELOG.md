@@ -12,6 +12,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consider to move the ActiveRecord related documents (.md files) back to this repo.
 - Review the tests, consider to add request specs.
 
+## [0.3.0.beta2](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.3.0.beta2) -
+
+### Changed
+
+- chore: cache pagination total ([#39](https://github.com/wallaby-rails/wallaby-active_record/pull/39))
+
+## [0.3.0.beta1](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.3.0.beta1) - 2023-09-22
+
+### Changed
+
+- fix: documentation for search syntax related to end-with ([#35](https://github.com/wallaby-rails/wallaby-active_record/pull/35))
+- fix: broken page when no primary key ([#34](https://github.com/wallaby-rails/wallaby-active_record/pull/34))
+- chore: Update rubocop to run only on the changed files ([#33](https://github.com/wallaby-rails/wallaby-active_record/pull/33))
+- chore: documentation by docsify ([#31](https://github.com/wallaby-rails/wallaby-active_record/pull/31))
+- chore: update test matrix with what Ruby and Rails support ([#30](https://github.com/wallaby-rails/wallaby-active_record/pull/30))
+- feat: allow nulls option and preload associations for index query ([#29](https://github.com/wallaby-rails/wallaby-active_record/pull/29))
+- chore: hide foreign and polymorphic keys instead of removing them from field_names ([#28](https://github.com/wallaby-rails/wallaby-active_record/pull/28))
+- chore: fix new rubocop issues e.g. Layout/IndentationWidth ([#27](https://github.com/wallaby-rails/wallaby-active_record/pull/27))
+- chore: revert the env step and fix the branch name in gemfiles ([#26](https://github.com/wallaby-rails/wallaby-active_record/pull/26))
+- chore: add step to echo env ([#25](https://github.com/wallaby-rails/wallaby-active_record/pull/25))
+- chore: add GITHUB_REF_NAME as well ([#24](https://github.com/wallaby-rails/wallaby-active_record/pull/24))
+- chore: use GITHUB_BASE_REF for gemfiles ([#23](https://github.com/wallaby-rails/wallaby-active_record/pull/23))
+- chore: use Github Actions instead ([#22](https://github.com/wallaby-rails/wallaby-active_record/pull/22))
+- chore: use Wallaby.controller_configuration instead of Wallaby.configuration ([#21](https://github.com/wallaby-rails/wallaby-active_record/pull/21))
+- chore: use Wallaby.controller_configuration instead of Wallaby.configuration ([#21](https://github.com/wallaby-rails/wallaby-active_record/pull/21))
+
+### Added
+
+- feat: support NULLS FIRST | LAST ([#32](https://github.com/wallaby-rails/wallaby-active_record/pull/32))
+
+## [0.2.7](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.7) - 2022-02-03
+
+### Changed
+
+- chore: use wallaby-core 0.2.3
+
 ## [0.2.6](https://github.com/wallaby-rails/wallaby-active_record/releases/tag/0.2.6) - 2020-04-19
 
 ### Changed
